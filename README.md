@@ -13,7 +13,7 @@ UTF-8-EAW-FULLWIDTH.gz がちょっと古くなっていたのでメンテ出来
 
 # インストール方法
 
-1. UTF-8-EAW-FULLWIDTH.gz を /usr/share/i18n/charmaps/ に配置
+1. [UTF-8-EAW-FULLWIDTH.gz](https://raw.githubusercontent.com/hamano/locale-eaw-fullwidth/master/UTF-8-EAW-FULLWIDTH.gz) を /usr/share/i18n/charmaps/ に配置
 
 2. /etc/locale.gen を以下のように変更
 ~~~
