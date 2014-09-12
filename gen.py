@@ -1,15 +1,19 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 import sys
 import re
 
+EAW_FILE='EastAsianWidth.txt'
 ORIGINAL_FILE='UTF-8'
 OUTPUT_FILE='UTF-8-EAW-FULLWIDTH'
+TEST_FILE='EastAsianAmbiguous.txt'
 
 def main():
     width_list = []
     line_re = re.compile('([a-fA-F\d]+);(\w)\s+#\s+(.*)')
-    f = open('EastAsianWidth.txt')
+    test = open(TEST_FILE, 'w', encoding='UTF-8')
+    f = open(EAW_FILE)
     for line in f:
         if line.startswith('#'):
             continue
@@ -24,10 +28,16 @@ def main():
         if int('E0100', 16) <= int(code, 16) and \
            int(code, 16) <= int('E01EF', 16):
             continue
-#        c = unichr(int(code, 16))
-#        print code, comment, c
         width_line = '<U%s> 2 %% %s' % (code, comment)
         width_list.append(width_line)
+
+        if sys.version_info.major >= 3:
+            c = chr(int(code, 16))
+        else:
+            c = unichr(int(code, 16))
+        test.write('[%c] U+%s %s\n' % (c, code, comment))
+
+    test.close()
     f.close()
     out = open(OUTPUT_FILE, 'w')
     f = open(ORIGINAL_FILE)
