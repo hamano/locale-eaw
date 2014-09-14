@@ -20,14 +20,17 @@ def main():
         match = line_re.match(line)
         if not match:
             continue
-        (code, amb, comment) = match.group(1), match.group(2), match.group(3)
+        (code, amb, comment) = match.groups()
         if amb != 'A':
             continue
 
         # Skip VARIATION SELECTOR
-        if int('E0100', 16) <= int(code, 16) and \
-           int(code, 16) <= int('E01EF', 16):
+        if int('FE00', 16) <= int(code, 16) <= int('FE0F', 16):
             continue
+
+        if int('E0100', 16) <= int(code, 16) <= int('E01EF', 16):
+            continue
+
         width_line = '<U%s> 2 %% %s' % (code, comment)
         width_list.append(width_line)
 
