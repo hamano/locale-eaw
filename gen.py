@@ -8,11 +8,12 @@ EAW_FILE='EastAsianWidth.txt'
 ORIGINAL_FILE='UTF-8'
 OUTPUT_FILE='UTF-8-EAW-FULLWIDTH'
 TEST_FILE='EastAsianAmbiguous.txt'
+ELISP_FILE='eaw-fullwidth.el'
 
 def main():
     width_list = []
     line_re = re.compile('([a-fA-F\d]+);(\w)\s+#\s+(.*)')
-    test = open(TEST_FILE, 'w', encoding='UTF-8')
+
     f = open(EAW_FILE)
     for line in f:
         if line.startswith('#'):
@@ -31,25 +32,47 @@ def main():
         if int('E0100', 16) <= int(code, 16) <= int('E01EF', 16):
             continue
 
-        width_line = '<U%s> 2 %% %s' % (code, comment)
-        width_list.append(width_line)
+        width_list.append((code, comment))
 
+    f.close()
+
+    generate_test(width_list)
+    generate_locale(width_list)
+    generate_elisp(width_list)
+    print('Generation complete.')
+
+def generate_test(width_list):
+    print('Generating %s ... ' % (TEST_FILE), end='')
+    out = open(TEST_FILE, 'w')
+
+    for (code, comment) in width_list:
         if sys.version_info.major >= 3:
             c = chr(int(code, 16))
         else:
             c = unichr(int(code, 16))
-        test.write('[%c] U+%s %s\n' % (c, code, comment))
+        print('[%c] U+%s %s' % (c, code, comment), file=out)
+    print('done')
 
-    test.close()
-    f.close()
+def generate_locale(width_list):
+    print('Generating %s ... ' % (OUTPUT_FILE), end='')
     out = open(OUTPUT_FILE, 'w')
     f = open(ORIGINAL_FILE)
     for line in f:
         if line.startswith('END WIDTH'):
             out.write('% Added East Asian Width\n')
-            out.write('\n'.join(width_list))
-            out.write('\n')
-        out.write(line)
+            for (code, comment) in width_list:
+                print('<U%s> 2 %% %s' % (code, comment), file=out)
+        print(line, end='', file=out)
+    print('done')
+
+def generate_elisp(width_list):
+    print('Generating %s ... ' % (ELISP_FILE), end='')
+    out = open(ELISP_FILE, 'w')
+    print('(setq east-asian-ambiguous \'(', file=out)
+    for (code, comment) in width_list:
+        print('  #x%s ; %s' % (code, comment), file=out)
+    print('))', file=out)
+    print('done')
 
 if __name__ == '__main__':
     main()
