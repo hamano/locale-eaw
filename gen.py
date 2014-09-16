@@ -25,7 +25,11 @@ def main():
         if amb != 'A':
             continue
 
-        # Skip VARIATION SELECTOR
+        # Exclude COMBINING CHARACTER
+        if int('0300', 16) <= int(code, 16) <= int('036F', 16):
+            continue
+
+        # Exclude VARIATION SELECTOR
         if int('FE00', 16) <= int(code, 16) <= int('FE0F', 16):
             continue
 
