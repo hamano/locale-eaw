@@ -2,7 +2,7 @@
 
 ## East Asian Ambiguous Width 問題とは
 
-East Asian Ambiguous 文字とは、Unicodeで文字幅が曖昧と定義されている文字のことで、例えば、○や×や△などの文字です。
+East Asian Ambiguous 文字とは、Unicodeで文字幅が曖昧と定義されている文字のことで、例えば、○(U+25CB)や×(U+00D7)や△(U+25B3)などの文字です。
 
 East Asian Ambiguous 文字の一覧は[こちら](https://raw.githubusercontent.com/hamano/eaw-fullwidth/master/EastAsianAmbiguous.txt)。
 
