@@ -9,6 +9,7 @@ ORIGINAL_FILE='UTF-8'
 OUTPUT_FILE='UTF-8-EAW-FULLWIDTH'
 TEST_FILE='EastAsianAmbiguous.txt'
 ELISP_FILE='eaw-fullwidth.el'
+ELISP_TEMPL='eaw-tmpl.el'
 
 def main():
     width_list = []
@@ -76,6 +77,8 @@ def generate_elisp(width_list):
     for (code, comment) in width_list:
         print('  #x%s ; %s' % (code, comment), file=out)
     print('))', file=out)
+    f = open(ELISP_TEMPL)
+    out.write(f.read())
     print('done')
 
 if __name__ == '__main__':

@@ -1,5 +1,3 @@
-(provide 'eaw-fullwidth)
-
 (setq east-asian-ambiguous '(
   #x00A1 ; INVERTED EXCLAMATION MARK
   #x00A4 ; CURRENCY SIGN
@@ -710,3 +708,5 @@
     (optimize-char-table table)
     (set-char-table-parent table char-width-table)
     (setq char-width-table table)))
+
+(provide 'eaw-fullwidth)
