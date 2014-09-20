@@ -8,9 +8,9 @@ East Asian Ambiguous 文字の一覧は[こちら](https://raw.githubusercontent
 
 East Asian Ambiguous Width 問題とはこれらの文字をコンソールで表示する際に、libcのlocale、ターミナル、エディタなどがそれぞれ異なる文字幅(半角、全角)で文字を扱う為に表示がズレてしまう問題です。
 
-この問題の解決方法は、利用しているアプリケーションにより様々な方法がありますが、解決方法のひとつは曖昧な文字の文字幅を全角で統一する事です。
+この問題のてっとり早い解決方法のひとつは曖昧な文字の文字幅を全角で統一する事です。
 
-対応方法はアプリケーションによって方法は様々ですが、xterm, mlterm, vimを使っている人は簡単に解決できます。
+対応方法はアプリケーションによって様々ですが、xterm, mlterm, vimなどを使っている人は簡単に解決できます。
 
 しかし、rxvt-unicodeやemacsを使っている人は残念でした、これらのアプリケーションは曖昧な文字幅を統一するオプションが用意されていません。
 
@@ -22,7 +22,7 @@ rxvt-unicodeはlibcのUTF-8ロケールを修正する事で、曖昧な文字�
 
 [こちら](http://vdr.jp/d/20070322.html)で配布されている UTF-8-EAW-FULLWIDTH.gz がちょっと古くなっていたので同じ方法で生成してメンテ出来るようにしました。
 
-## インストール方法
+## 解決方法
 
 1. [UTF-8-EAW-FULLWIDTH.gz](https://raw.githubusercontent.com/hamano/eaw-fullwidth/master/UTF-8-EAW-FULLWIDTH.gz) を /usr/share/i18n/charmaps/ に配置
 
@@ -49,3 +49,14 @@ if exists('&ambw')
     set ambw=double
 endif
 ~~~
+
+# xtermで曖昧な文字幅を全角にする
+
+.Xresourcesなどに以下を設定する
+
+~~~
+xterm*utf8: 1
+xterm*locale: true
+xterm*cjkWidth: true
+~~~
+
