@@ -51,10 +51,7 @@ def generate_test(width_list):
     out = open(TEST_FILE, 'w')
 
     for (code, comment) in width_list:
-        if sys.version_info.major >= 3:
-            c = chr(int(code, 16))
-        else:
-            c = unichr(int(code, 16))
+        c = chr(int(code, 16))
         print('[%c] U+%s %s' % (c, code, comment), file=out)
     print('done')
 
