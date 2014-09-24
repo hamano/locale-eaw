@@ -60,3 +60,7 @@ xterm*locale: true
 xterm*cjkWidth: true
 ~~~
 
+# xtermで曖昧な文字幅を全角にする
+
+.mlterm/main に `col_size_of_width_a = 2` と設定する
+
