@@ -60,7 +60,8 @@ xterm*locale: true
 xterm*cjkWidth: true
 ~~~
 
-# xtermで曖昧な文字幅を全角にする
+# mltermで曖昧な文字幅を全角にする
 
+実行オプションに `-a 2` を付けるか、
 .mlterm/main に `col_size_of_width_a = 2` と設定する
 
