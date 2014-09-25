@@ -65,3 +65,11 @@ xterm*cjkWidth: true
 実行オプションに `-a 2` を付けるか、
 .mlterm/main に `col_size_of_width_a = 2` と設定する
 
+# GNU screenで曖昧な文字幅を全角にする
+~/.screenrc に
+~~~
+cjkwidth on
+~~~
+と設定する。
+
+
