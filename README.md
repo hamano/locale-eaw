@@ -42,28 +42,32 @@ ja_JP.UTF-8 UTF-8-EAW-FULLWIDTH
 
 # vimで曖昧な文字幅を全角にする
 
-.vimrcに以下を設定するだけです。
-
+.vimrc に、
 ~~~
 if exists('&ambw')
     set ambw=double
 endif
 ~~~
+と設定する。
 
 # xtermで曖昧な文字幅を全角にする
 
-.Xresourcesなどに以下を設定する
-
+.Xresources などに、
 ~~~
 xterm*utf8: 1
 xterm*locale: true
 xterm*cjkWidth: true
 ~~~
+と設定する。
 
 # mltermで曖昧な文字幅を全角にする
 
 実行オプションに `-a 2` を付けるか、
-.mlterm/main に `col_size_of_width_a = 2` と設定する
+.mlterm/main に、
+~~~
+col_size_of_width_a = 2
+~~~
+と設定する。
 
 # GNU screenで曖昧な文字幅を全角にする
 ~/.screenrc に
@@ -72,4 +76,10 @@ cjkwidth on
 ~~~
 と設定する。
 
+# w3mで曖昧な文字幅を全角にする
 
+~/.w3m/config に
+~~~
+east_asian_width 1
+~~~
+と設定する。
