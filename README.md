@@ -1,10 +1,10 @@
-# East Asian Ambiguous Width 問題の解決方法
+# East Asian Ambiguous Width 問題の為の修正ロケール
 
 ## East Asian Ambiguous Width 問題とは
 
 East Asian Ambiguous 文字とは、Unicodeで文字幅が曖昧と定義されている文字のことで、例えば、○(U+25CB)や×(U+00D7)や△(U+25B3)などの文字です。
 
-East Asian Ambiguous 文字の一覧は[こちら](https://raw.githubusercontent.com/hamano/eaw-fullwidth/master/EastAsianAmbiguous.txt)。
+East Asian Ambiguous 文字の一覧は[こちら](https://raw.githubusercontent.com/hamano/locale-eaw/master/EastAsianAmbiguous.txt)。
 
 East Asian Ambiguous Width 問題とはこれらの文字をコンソールで表示する際に、libcのlocale、ターミナル、エディタなどがそれぞれ異なる文字幅(半角、全角)で文字を扱う為に表示がズレてしまう問題です。
 
@@ -24,7 +24,7 @@ rxvt-unicodeはlibcのUTF-8ロケールを修正する事で、曖昧な文字�
 
 ## 解決方法
 
-1. [UTF-8-EAW-FULLWIDTH.gz](https://raw.githubusercontent.com/hamano/eaw-fullwidth/master/UTF-8-EAW-FULLWIDTH.gz) を /usr/share/i18n/charmaps/ に配置
+1. [UTF-8-EAW-FULLWIDTH.gz](https://raw.githubusercontent.com/hamano/locale-eaw/master/UTF-8-EAW-FULLWIDTH.gz) を /usr/share/i18n/charmaps/ に配置
 
 2. /etc/locale.gen を以下のように変更
 ~~~
@@ -39,7 +39,7 @@ ja_JP.UTF-8 UTF-8-EAW-FULLWIDTH
 emacs21 と emacs22 と emacs23以降で対応方法が異なります。
 様々なemacsのバージョンで動作するelispを用意していますのでこれを使ってください。
 
-1. [eaw-fullwidth.el](https://raw.githubusercontent.com/hamano/eaw-fullwidth/master/) を .emacs.d/site-lisp/ に配置
+1. [eaw-fullwidth.el](https://raw.githubusercontent.com/hamano/locale-eaw/master/eaw-fullwidth.el) を .emacs.d/site-lisp/ に配置
 
 2. .emacs に以下を設定する
 
