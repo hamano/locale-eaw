@@ -36,9 +36,17 @@ ja_JP.UTF-8 UTF-8-EAW-FULLWIDTH
 
 # emacsで曖昧な文字幅を全角にする
 
+emacs21 と emacs22 と emacs23以降で対応方法が異なります。
+様々なemacsのバージョンで動作するelispを用意していますのでこれを使ってください。
+
 1. [eaw-fullwidth.el](https://raw.githubusercontent.com/hamano/eaw-fullwidth/master/) を .emacs.d/site-lisp/ に配置
 
-2. .emacs で `(require 'eaw-fullwidth)` する。
+2. .emacs に以下を設定する
+
+~~~
+(setq load-path (cons "~/.emacs.d/site-lisp" load-path))
+(require 'eaw-fullwidth)
+~~~
 
 # vimで曖昧な文字幅を全角にする
 
