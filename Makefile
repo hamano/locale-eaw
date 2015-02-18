@@ -1,4 +1,4 @@
-UNICODE_VER=5.0.0
+UNICODE_VER=6.0.0
 EAW_URI=http://www.unicode.org/Public/$(UNICODE_VER)/ucd/EastAsianWidth.txt
 
 all: UTF-8-EAW-FULLWIDTH.gz
@@ -15,3 +15,6 @@ UTF-8-EAW-FULLWIDTH.gz: UTF-8-EAW-FULLWIDTH
 install:
 	install UTF-8-EAW-FULLWIDTH.gz /usr/share/i18n/charmaps/
 	locale-gen
+
+clean:
+	rm -rf EastAsianWidth.txt UTF-8-EAW-FULLWIDTH UTF-8-EAW-FULLWIDTH.gz
