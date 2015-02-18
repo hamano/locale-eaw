@@ -63,7 +63,11 @@ def generate_locale(width_list):
         if line.startswith('END WIDTH'):
             out.write('% Added East Asian Width\n')
             for (code, comment) in width_list:
-                print('<U%s> 2 %% %s' % (code, comment), file=out)
+                n = int(code, 16)
+                if n <= 0xffff:
+                    print('<U%04X> 2 %% %s' % (n, comment), file=out)
+                else:
+                    print('<U%08X> 2 %% %s' % (n, comment), file=out)
         print(line, end='', file=out)
     print('done')
 
