@@ -17,4 +17,4 @@ install:
 	locale-gen
 
 clean:
-	rm -rf EastAsianWidth.txt UTF-8-EAW-FULLWIDTH UTF-8-EAW-FULLWIDTH.gz
+	rm -rf UTF-8-EAW-FULLWIDTH UTF-8-EAW-FULLWIDTH.gz
