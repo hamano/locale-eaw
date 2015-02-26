@@ -16,13 +16,11 @@ East Asian Ambiguous Width 問題とはこれらの文字をコンソールで�
 
 このレポジトリでは、主にrxvt-unicodeとemacsの曖昧な文字幅問題を解決するファイルをメンテしています。
 
-#  rxvt-unicodeで曖昧な文字幅を全角にする
+##  rxvt-unicodeで曖昧な文字幅を全角にする
 
 rxvt-unicodeはlibcのUTF-8ロケールを修正する事で、曖昧な文字幅を統一できます。
 
 [こちら](http://vdr.jp/d/20070322.html)で配布されている UTF-8-EAW-FULLWIDTH.gz がちょっと古くなっていたので同じ方法で生成してメンテ出来るようにしました。
-
-## 解決方法
 
 1. [UTF-8-EAW-FULLWIDTH.gz](https://raw.githubusercontent.com/hamano/locale-eaw/master/UTF-8-EAW-FULLWIDTH.gz) を /usr/share/i18n/charmaps/ に配置
 
@@ -34,21 +32,22 @@ ja_JP.UTF-8 UTF-8-EAW-FULLWIDTH
 
 3. locale-gen を実行
 
-# emacsで曖昧な文字幅を全角にする
+## emacsで曖昧な文字幅を全角にする
 
 emacs21 と emacs22 と emacs23以降で対応方法が異なります。
 様々なemacsのバージョンで動作するelispを用意していますのでこれを使ってください。
 
-1. [eaw-fullwidth.el](https://raw.githubusercontent.com/hamano/locale-eaw/master/eaw-fullwidth.el) を .emacs.d/site-lisp/ に配置
+1. [eaw-fullwidth.el](https://raw.githubusercontent.com/hamano/locale-eaw/master/eaw-fullwidth.el) を ~/.emacs.d/site-lisp/ に配置
 
 2. .emacs に以下を設定する
 
 ~~~
-(setq load-path (cons "~/.emacs.d/site-lisp" load-path))
-(require 'eaw-fullwidth)
+(add-to-list 'load-path "~/.emacs.d/site-lisp")
+(require 'eaw)
+(eaw-fullwidth)
 ~~~
 
-# vimで曖昧な文字幅を全角にする
+## vimで曖昧な文字幅を全角にする
 
 .vimrc に、
 ~~~
@@ -58,7 +57,7 @@ endif
 ~~~
 と設定する。
 
-# xtermで曖昧な文字幅を全角にする
+## xtermで曖昧な文字幅を全角にする
 
 .Xresources などに、
 ~~~
@@ -68,7 +67,7 @@ xterm*cjkWidth: true
 ~~~
 と設定する。
 
-# mltermで曖昧な文字幅を全角にする
+## mltermで曖昧な文字幅を全角にする
 
 実行オプションに `-a 2` を付けるか、
 .mlterm/main に、
@@ -77,14 +76,14 @@ col_size_of_width_a = 2
 ~~~
 と設定する。
 
-# GNU screenで曖昧な文字幅を全角にする
+## GNU screenで曖昧な文字幅を全角にする
 ~/.screenrc に
 ~~~
 cjkwidth on
 ~~~
 と設定する。
 
-# w3mで曖昧な文字幅を全角にする
+## w3mで曖昧な文字幅を全角にする
 
 ~/.w3m/config に
 ~~~
