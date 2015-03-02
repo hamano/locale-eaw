@@ -37,7 +37,7 @@ ja_JP.UTF-8 UTF-8-EAW-FULLWIDTH
 emacs21 と emacs22 と emacs23以降で対応方法が異なります。
 様々なemacsのバージョンで動作するelispを用意していますのでこれを使ってください。
 
-1. [eaw-fullwidth.el](https://raw.githubusercontent.com/hamano/locale-eaw/master/eaw-fullwidth.el) を ~/.emacs.d/site-lisp/ に配置
+1. [eaw.el](https://raw.githubusercontent.com/hamano/locale-eaw/master/eaw.el) を ~/.emacs.d/site-lisp/ に配置
 
 2. .emacs に以下を設定する
 
