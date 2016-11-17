@@ -1,4 +1,4 @@
-UNICODE_VER=6.0.0
+UNICODE_VER=9.0.0
 EAW_URI=http://www.unicode.org/Public/$(UNICODE_VER)/ucd/EastAsianWidth.txt
 
 all: UTF-8-EAW-FULLWIDTH.gz

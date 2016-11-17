@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.2
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 import sys
@@ -20,7 +20,7 @@ def main():
 
 def read_amb_code(fn):
     ret = []
-    line_re = re.compile('([a-fA-F\d]+);(\w)\s+#\s+(.*)')
+    line_re = re.compile('([a-fA-F\d\.]+);(\w)\s+#\s+(.*)')
     f = open(fn)
     for line in f:
         if line.startswith('#'):
@@ -32,18 +32,43 @@ def read_amb_code(fn):
         if amb != 'A':
             continue
 
-        # Exclude COMBINING CHARACTER
-        if int('0300', 16) <= int(code, 16) <= int('036F', 16):
-            continue
-
-        # Exclude VARIATION SELECTOR
-        if int('FE00', 16) <= int(code, 16) <= int('FE0F', 16):
-            continue
-
-        if int('E0100', 16) <= int(code, 16) <= int('E01EF', 16):
-            continue
-
-        ret.append((code, comment))
+        if '.' in code:
+            # range code
+            (start, end) = tuple(code.split('..'))
+            # Exclude COMBINING CHARACTER
+            if '0300' == start:
+                continue
+            # Exclude <private-use-E000>..<private-use-F8FF>
+            if 'E000' == start:
+                continue
+            # Exclude VARIATION SELECTOR-1..VARIATION SELECTOR-16
+            if 'FE00' == start:
+                continue
+            # Exclude VARIATION SELECTOR-17..VARIATION SELECTOR-256
+            if 'E0100' == start:
+                continue
+            # Exclude <private-use-F0000>..<private-use-FFFFD>
+            if 'F0000' == start:
+                continue
+            # Exclude private-use-100000
+            if '100000' == start:
+                continue
+            # Exclude SQUARED THREE D..SQUARED VOD
+            if '1F19B' == start:
+                continue
+            ret.append(((int(start, 16), int(end, 16)), comment))
+        else:
+            # single code
+            n = int(code, 16)
+            # Exclude COMBINING CHARACTER
+            if int('0300', 16) <= n <= int('036F', 16):
+                continue
+            # Exclude VARIATION SELECTOR
+            if int('FE00', 16) <= n <= int('FE0F', 16):
+                continue
+            if int('E0100', 16) <= n <= int('E01EF', 16):
+                continue
+            ret.append((n, comment))
     f.close()
     return ret
 
@@ -52,9 +77,20 @@ def generate_test(code_list):
     out = open(TEST_FILE, 'w', encoding='UTF-8')
 
     for (code, comment) in code_list:
-        c = chr(int(code, 16))
-        print('[%c] U+%s %s' % (c, code, comment), file=out)
+        if type(code) == tuple:
+            for n in range(code[0], code[1] + 1):
+                c = chr(n)
+                print('[%c] U+%04X %s' % (c, n, comment), file=out)
+        else:
+            c = chr(code)
+            print('[%c] U+%04X %s' % (c, code, comment), file=out)
     print('done')
+
+def print_locale(out, n, comment):
+    if n <= 0xffff:
+        print('<U%04X> 2 %% %s' % (n, comment), file=out)
+    else:
+        print('<U%08X> 2 %% %s' % (n, comment), file=out)
 
 def generate_locale(code_list):
     print('Generating %s ... ' % (OUTPUT_FILE), end='')
@@ -64,11 +100,11 @@ def generate_locale(code_list):
         if line.startswith('END WIDTH'):
             out.write('% Added East Asian Width\n')
             for (code, comment) in code_list:
-                n = int(code, 16)
-                if n <= 0xffff:
-                    print('<U%04X> 2 %% %s' % (n, comment), file=out)
+                if type(code) == tuple:
+                    for n in range(code[0], code[1] + 1):
+                        print_locale(out, n, comment)
                 else:
-                    print('<U%08X> 2 %% %s' % (n, comment), file=out)
+                    print_locale(out, code, comment)
         print(line, end='', file=out)
     print('done')
 
@@ -77,7 +113,11 @@ def generate_elisp(code_list):
     out = open(ELISP_FILE, 'w')
     print('(setq east-asian-ambiguous \'(', file=out)
     for (code, comment) in code_list:
-        print('  #x%s ; %s' % (code, comment), file=out)
+        if type(code) == tuple:
+            for n in range(code[0], code[1] + 1):
+                print('  #x%04X ; %s' % (n, comment), file=out)
+        else:
+            print('  #x%04X ; %s' % (code, comment), file=out)
     print('))', file=out)
     f = open(ELISP_TEMPL)
     out.write(f.read())
