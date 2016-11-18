@@ -16,6 +16,12 @@ East Asian Ambiguous Width 問題とはこれらの文字をコンソールで�
 
 このレポジトリでは、主にrxvt-unicodeとemacsの曖昧な文字幅問題を解決するファイルをメンテしています。
 
+## 絵文字について
+絵文字はUnicodeでNarrowと定義されているにも関わらず、多くのフォントは全角で描かれているという問題があります。
+たとえば🀀(U+1F000)、🕿(U+1F57F)。
+この問題に対処するため、U+1F000-U+1FFFFの範囲のNarrow文字を全角にするという対応を行いました。
+この範囲以外の絵文字についてはどうしたらよいのかよく分からないのでそのままにしてあります。
+
 ##  rxvt-unicodeで曖昧な文字幅を全角にする
 
 rxvt-unicodeはlibcのUTF-8ロケールを修正する事で、曖昧な文字幅を統一できます。
@@ -75,6 +81,12 @@ xterm*cjkWidth: true
 col_size_of_width_a = 2
 ~~~
 と設定する。
+
+絵文字も全角にするには
+
+~~~
+unicode_full_width_areas = U+1F000-1FFFF
+~~~
 
 ## GNU screenで曖昧な文字幅を全角にする
 ~/.screenrc に

@@ -7,7 +7,7 @@ import re
 EAW_FILE='EastAsianWidth.txt'
 ORIGINAL_FILE='UTF-8'
 OUTPUT_FILE='UTF-8-EAW-FULLWIDTH'
-TEST_FILE='EastAsianAmbiguous.txt'
+TEST_FILE='test.txt'
 ELISP_FILE='eaw.el'
 ELISP_TEMPL='eaw-template.el'
 
@@ -29,7 +29,7 @@ def read_amb_code(fn):
         if not match:
             continue
         (code, amb, comment) = match.groups()
-        if amb != 'A':
+        if amb != 'A' and amb != 'N':
             continue
 
         if '.' in code:
@@ -56,6 +56,10 @@ def read_amb_code(fn):
             # Exclude SQUARED THREE D..SQUARED VOD
             if '1F19B' == start:
                 continue
+            if amb == 'N':
+                # emoji
+                if int(start, 16) < 0x1F000 or 0x1FFFF < int(start, 16):
+                    continue
             ret.append(((int(start, 16), int(end, 16)), comment))
         else:
             # single code
@@ -68,6 +72,10 @@ def read_amb_code(fn):
                 continue
             if int('E0100', 16) <= n <= int('E01EF', 16):
                 continue
+            if amb == 'N':
+                # emoji
+                if n < 0x1F000 or 0x1FFFF < n:
+                    continue
             ret.append((n, comment))
     f.close()
     return ret
