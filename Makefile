@@ -1,4 +1,4 @@
-UNICODE_VER=8.0.0
+UNICODE_VER=9.0.0
 URI=http://www.unicode.org/Public/$(UNICODE_VER)/ucd
 
 all: UTF-8-EAW-FULLWIDTH.gz
