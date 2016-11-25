@@ -1,4 +1,4 @@
-# East Asian Ambiguous Width 問題の為の修正ロケール
+# East Asian Ambiguous Widthと絵文字の為の修正ロケール
 
 ## East Asian Ambiguous Width 問題とは
 
@@ -17,7 +17,7 @@ East Asian Ambiguous Width 問題とはこれらの文字をコンソールで�
 このレポジトリでは、主にrxvt-unicodeとemacsの曖昧な文字幅問題を解決するファイルをメンテしています。
 
 ## 絵文字について
-絵文字はUnicodeでNarrowと定義されているにも関わらず、多くのフォントは全角で描かれているという問題があります。
+絵文字はNarrowと定義されているにも関わらず、フォントは全角で描かれているという問題があります。
 たとえば🀀(U+1F000)、🕿(U+1F57F)。
 この問題に対処するため、U+1F000-U+1FFFFの範囲のNarrow文字を全角にするという対応を行いました。
 この範囲以外の絵文字についてはどうしたらよいのかよく分からないのでそのままにしてあります。

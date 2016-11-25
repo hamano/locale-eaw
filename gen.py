@@ -29,12 +29,11 @@ def read_amb_code(fn):
         if not match:
             continue
         (code, amb, comment) = match.groups()
-        if amb != 'A' and amb != 'N':
-            continue
 
         if '.' in code:
             # range code
             (start, end) = tuple(code.split('..'))
+            n = int(start, 16)
             # Exclude COMBINING CHARACTER
             if '0300' == start:
                 continue
@@ -56,10 +55,13 @@ def read_amb_code(fn):
             # Exclude SQUARED THREE D..SQUARED VOD
             if '1F19B' == start:
                 continue
-            if amb == 'N':
-                # emoji
-                if int(start, 16) < 0x1F000 or 0x1FFFF < int(start, 16):
-                    continue
+            # emoji
+            if 0x1F000 <= n and n <= 0x1FFFF:
+                ret.append(((int(start, 16), int(end, 16)), comment))
+                continue
+
+            if amb != 'A':
+                continue
             ret.append(((int(start, 16), int(end, 16)), comment))
         else:
             # single code
@@ -72,10 +74,12 @@ def read_amb_code(fn):
                 continue
             if int('E0100', 16) <= n <= int('E01EF', 16):
                 continue
-            if amb == 'N':
-                # emoji
-                if n < 0x1F000 or 0x1FFFF < n:
-                    continue
+            # emoji
+            if 0x1F000 <= n and n <= 0x1FFFF:
+                ret.append((n, comment))
+                continue
+            if amb != 'A':
+                continue
             ret.append((n, comment))
     f.close()
     return ret
