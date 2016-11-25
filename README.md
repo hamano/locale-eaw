@@ -4,7 +4,7 @@
 
 East Asian Ambiguous 文字とは、Unicodeで文字幅が曖昧と定義されている文字のことで、例えば、○(U+25CB)や×(U+00D7)や△(U+25B3)などの文字です。
 
-East Asian Ambiguous 文字の一覧は[こちら](https://raw.githubusercontent.com/hamano/locale-eaw/master/EastAsianAmbiguous.txt)。
+East Asian Ambiguous 文字の一覧は[こちら](https://raw.githubusercontent.com/hamano/locale-eaw/master/test.txt)。
 
 East Asian Ambiguous Width 問題とはこれらの文字をコンソールで表示する際に、libcのlocale、ターミナル、エディタなどがそれぞれ異なる文字幅(半角、全角)で文字を扱う為に表示がズレてしまう問題です。
 
@@ -22,9 +22,7 @@ East Asian Ambiguous Width 問題とはこれらの文字をコンソールで�
 この問題に対処するため、U+1F000-U+1FFFFの範囲のNarrow文字を全角にするという対応を行いました。
 この範囲以外の絵文字についてはどうしたらよいのかよく分からないのでそのままにしてあります。
 
-##  rxvt-unicodeで曖昧な文字幅を全角にする
-
-rxvt-unicodeはlibcのUTF-8ロケールを修正する事で、曖昧な文字幅を統一できます。
+## libcのロケールの曖昧な文字幅を全角にする
 
 [こちら](http://vdr.jp/d/20070322.html)で配布されている UTF-8-EAW-FULLWIDTH.gz がちょっと古くなっていたので同じ方法で生成してメンテ出来るようにしました。
 
@@ -37,6 +35,10 @@ ja_JP.UTF-8 UTF-8-EAW-FULLWIDTH
 ~~~
 
 3. locale-gen を実行
+
+## rxvt-unicodeで曖昧な文字幅を全角にする
+
+rxvt-unicodeは前述したlibcのロケールを修正する事で、曖昧な文字幅を統一できます。
 
 ## emacsで曖昧な文字幅を全角にする
 
