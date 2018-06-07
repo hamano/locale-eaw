@@ -109,8 +109,22 @@ east_asian_width 1
 
 libcのロケールを修正する事で、曖昧な文字幅を統一できます。
 
-## tmux 2.7以降
+## 最近のtmux
 
-???
+`setlocale(LC_CTYPE, "en_US.UTF-8")` がハードコードされているので以下のように修正する。
+
+~~~
+diff --git a/tmux.c b/tmux.c
+index 5b73079..0377ddd 100644
+--- a/tmux.c
++++ b/tmux.c
+@@ -202,6 +202,7 @@ main(int argc, char **argv)
+                        errx(1, "need UTF-8 locale (LC_CTYPE) but have %s", s);
+        }
+
++       setlocale(LC_CTYPE, "");
+        setlocale(LC_TIME, "");
+        tzset();
+~~~
 
 
