@@ -22,11 +22,11 @@ UTF-8-EAW-FULLWIDTH.gz: UTF-8-EAW-FULLWIDTH
 	gzip -9 -c $^ > $@
 
 install:
-	install UTF-8-EAW-FULLWIDTH.gz /usr/share/i18n/charmaps/
-	locale-gen
+	sudo install UTF-8-EAW-FULLWIDTH.gz /usr/share/i18n/charmaps/
+	sudo locale-gen
 
 clean_data:
-	rm -rf UnicodeData.txt EastAsianWidth.txt EmojiSources.txt
+	rm -rf EmojiSources.txt
 
 clean:
 	rm -rf UTF-8 UTF-8-EAW-FULLWIDTH UTF-8-EAW-FULLWIDTH.gz
