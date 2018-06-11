@@ -6,7 +6,9 @@ East Asian Ambiguous 文字とは、Unicodeで文字幅が曖昧と定義され�
 
 East Asian Ambiguous 文字の一覧は[こちら](https://raw.githubusercontent.com/hamano/locale-eaw/master/test.txt)。
 
-East Asian Ambiguous Width 問題とはこれらの文字をコンソールで表示する際に、libcのlocale、ターミナル、エディタなどがそれぞれ異なる文字幅(半角、全角)で文字を扱う為に表示がズレてしまう問題です。
+East Asian Ambiguous Width 問題とは、これらの文字をコンソールで表示する際に、libcの`wcwidth(3)`、ターミナル、エディタなどがそれぞれ異なる文字幅(半角、全角)で文字を扱うため、表示が壊れてしまう問題です。
+
+テキストエディタの場合カーソルの内部状態と表示位置がズレたりします。
 
 この問題のてっとり早い解決方法のひとつは曖昧な文字の文字幅を全角で統一する事です。
 
@@ -107,11 +109,12 @@ east_asian_width 1
 
 ## tmux 2.2以降
 
-libcのロケールを修正する事で、曖昧な文字幅を統一できます。
+* libcのロケールを修正 -> tmuxのウィンドウ内の表示はA=2に統一できます
+* ウィンドウ分割時の罫線は改修が必要です
 
-## 最近のtmux
+## tmux 2.7以降
 
-`setlocale(LC_CTYPE, "en_US.UTF-8")` がハードコードされているので以下のように修正する。
+libcのロケールをA=2に修正した上で、以下の修正が必要でした
 
 ~~~
 diff --git a/tmux.c b/tmux.c
@@ -128,3 +131,12 @@ index 5b73079..0377ddd 100644
 ~~~
 
 
+ターミナルがACSをサポートしている場合、罫線の描画にACSを使うよう設定します。
+
+~/.tmux.conf:
+
+~~~
+set -ag terminal-overrides ',*:U8=0'
+~~~
+
+* [tmuxの罫線素片をACSに強制する](https://qiita.com/yanma/items/2644e6db6f3bcf249690)
