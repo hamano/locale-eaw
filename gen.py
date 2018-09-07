@@ -28,61 +28,49 @@ def read_amb_code(fn):
         match = line_re.match(line)
         if not match:
             continue
-        (code, amb, comment) = match.groups()
-
-        if '.' in code:
+        (code_or_range, amb, comment) = match.groups()
+        if '.' in code_or_range:
             # range code
-            (start, end) = tuple(code.split('..'))
-            n = int(start, 16)
-            # Exclude COMBINING CHARACTER
-            if '0300' == start:
-                continue
-            # Exclude <private-use-E000>..<private-use-F8FF>
-            if 'E000' == start:
-                continue
-            # Exclude VARIATION SELECTOR-1..VARIATION SELECTOR-16
-            if 'FE00' == start:
-                continue
-            # Exclude VARIATION SELECTOR-17..VARIATION SELECTOR-256
-            if 'E0100' == start:
-                continue
-            # Exclude <private-use-F0000>..<private-use-FFFFD>
-            if 'F0000' == start:
-                continue
-            # Exclude private-use-100000
-            if '100000' == start:
-                continue
-            # Exclude SQUARED THREE D..SQUARED VOD
-            if '1F19B' == start:
-                continue
-            # Emoji
-            if (0x2600 <= n and n <= 0x26FF) or \
-               (0x1F000 <= n and n <= 0x1FFFF):
-                ret.append(((int(start, 16), int(end, 16)), comment))
-                continue
-
-            if amb != 'A':
-                continue
-            ret.append(((int(start, 16), int(end, 16)), comment))
+            (start, end) = tuple(code_or_range.split('..'))
+            code = int(start, 16)
         else:
             # single code
-            n = int(code, 16)
-            # Exclude COMBINING CHARACTER
-            if int('0300', 16) <= n <= int('036F', 16):
-                continue
-            # Exclude VARIATION SELECTOR
-            if int('FE00', 16) <= n <= int('FE0F', 16):
-                continue
-            if int('E0100', 16) <= n <= int('E01EF', 16):
-                continue
-            # Emoji
-            if (0x2600 <= n and n <= 0x26FF) or \
-               (0x1F000 <= n and n <= 0x1FFFF):
-                ret.append((n, comment))
-                continue
-            if amb != 'A':
-                continue
-            ret.append((n, comment))
+            code = int(code_or_range, 16)
+
+        # Exclude COMBINING CHARACTER
+        if 0x0300 <= code <= 0x036F:
+            continue
+        # Exclude <private-use-E000>..<private-use-F8FF>
+        if 0xE000 <= code <= 0xF8FF:
+            continue
+        # Exclude <private-use-E000>..<private-use-F8FF>
+        if 0xFE00 <= code <= 0xFE0F:
+            continue
+        # Exclude VARIATION SELECTOR-17..VARIATION SELECTOR-256
+        if 0xE0100 <= code <= 0xE01EF:
+            continue
+        # Exclude <private-use-F0000>..<private-use-FFFFD>
+        if 0xF0000 <= code <= 0xFFFFD:
+            continue
+        # Exclude <private-use-100000>..<private-use-10FFFD>
+        if 0x100000 <= code <= 0x10FFFD:
+            continue
+        # Exclude SQUARED THREE D..SQUARED VOD
+        if 0x1F19B == code:
+            continue
+        # Emoji
+        if (0x2600 <= code <= 0x26FF) or \
+           (0x1F000 <= code <= 0x1FFFF):
+            # 絵文字を全角にする
+            amb = 'A'
+
+        if amb != 'A':
+            continue
+
+        if '.' in code_or_range:
+            ret.append(((int(start, 16), int(end, 16)), comment))
+        else:
+            ret.append((code, comment))
     f.close()
     return ret
 
