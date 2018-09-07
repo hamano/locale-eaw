@@ -55,8 +55,9 @@ def read_amb_code(fn):
             # Exclude SQUARED THREE D..SQUARED VOD
             if '1F19B' == start:
                 continue
-            # emoji
-            if 0x1F000 <= n and n <= 0x1FFFF:
+            # Emoji
+            if (0x2600 <= n and n <= 0x26FF) or \
+               (0x1F000 <= n and n <= 0x1FFFF):
                 ret.append(((int(start, 16), int(end, 16)), comment))
                 continue
 
@@ -74,8 +75,9 @@ def read_amb_code(fn):
                 continue
             if int('E0100', 16) <= n <= int('E01EF', 16):
                 continue
-            # emoji
-            if 0x1F000 <= n and n <= 0x1FFFF:
+            # Emoji
+            if (0x2600 <= n and n <= 0x26FF) or \
+               (0x1F000 <= n and n <= 0x1FFFF):
                 ret.append((n, comment))
                 continue
             if amb != 'A':
