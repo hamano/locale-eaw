@@ -55,9 +55,6 @@ def read_amb_code(fn):
         # Exclude <private-use-100000>..<private-use-10FFFD>
         if 0x100000 <= code <= 0x10FFFD:
             continue
-        # Exclude SQUARED THREE D..SQUARED VOD
-        if 0x1F19B == code:
-            continue
         # Emoji
         if (0x2600 <= code <= 0x26FF) or \
            (0x1F000 <= code <= 0x1FFFF):
