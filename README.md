@@ -2,17 +2,17 @@
 
 ## East Asian Ambiguous Width 問題とは
 
-East Asian Ambiguous 文字とは、Unicodeで文字幅が曖昧と定義されている文字のことで、例えば、○(U+25CB)や×(U+00D7)や△(U+25B3)などの文字です。
+East Asian Ambiguous 文字とは、Unicodeで文字幅が曖昧(文脈により異なる文字幅で表示する)と定義されている文字のことで、例えば、○(U+25CB)や×(U+00D7)や△(U+25B3)などの文字です。
 
 East Asian Ambiguous 文字の一覧は[こちら](https://raw.githubusercontent.com/hamano/locale-eaw/master/test.txt)。
 
-East Asian Ambiguous Width 問題とは、これらの文字をコンソールで表示する際に、libcの`wcwidth(3)`、ターミナル、エディタなどがそれぞれ異なる文字幅(半角、全角)で文字を扱うため、表示が壊れてしまう問題です。
+East Asian Ambiguous Width 問題とは、これらの文字をコンソールで表示する際に、libcの`wcwidth(3)`、ターミナルエミュレータ、テキストエディタなどがそれぞれ異なる文字幅(半角、全角)と認識するため、表示が壊れてしまう問題です。
 
 テキストエディタの場合カーソルの内部状態と表示位置がズレたりします。
 
 この問題のてっとり早い解決方法のひとつは曖昧な文字の文字幅を全角で統一する事です。
 
-対応方法はアプリケーションによって様々ですが、xterm, mlterm, vimなどを使っている人は簡単に文字幅を変更することができます。
+対応方法はアプリケーションによって様々ですが、xterm, mlterm, vimなどを使っている人は設定やオプションを指定するだけで文字幅を変更することができます。
 
 しかし、rxvt-unicodeやemacsを使っている人は残念でした、これらのアプリケーションは曖昧な文字幅を統一するオプションが用意されていません。
 

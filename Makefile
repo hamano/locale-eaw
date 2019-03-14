@@ -1,4 +1,4 @@
-UNICODE_VER=9.0.0
+UNICODE_VER=12.0.0
 URI=http://www.unicode.org/Public/$(UNICODE_VER)/ucd
 
 all: UTF-8-EAW-FULLWIDTH.gz
@@ -26,7 +26,7 @@ install:
 	sudo locale-gen
 
 clean_data:
-	rm -rf EmojiSources.txt
+	rm -rf UnicodeData.txt EastAsianWidth.txt EmojiSources.txt
 
 clean:
 	rm -rf UTF-8 UTF-8-EAW-FULLWIDTH UTF-8-EAW-FULLWIDTH.gz
