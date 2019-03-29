@@ -1,3 +1,11 @@
+;;; eaw.el --- Fix east asian ambiguous width issue for emacs
+;; Author: HAMANO Tsukasa <code@cuspy.org>
+;; URL: https://github.com/hamano/locale-eaw
+;; Version: 12
+;; MIT License
+
+;;; Code:
+
 (setq east-asian-ambiguous '(
   #x00A1 ; Po         INVERTED EXCLAMATION MARK
   #x00A4 ; Sc         CURRENCY SIGN
@@ -3186,3 +3194,5 @@
   (eaw-set-width 2))
 
 (provide 'eaw)
+
+;;; eaw.el ends here

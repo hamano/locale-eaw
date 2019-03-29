@@ -9,7 +9,8 @@ ORIGINAL_FILE='UTF-8'
 OUTPUT_FILE='UTF-8-EAW-FULLWIDTH'
 TEST_FILE='test.txt'
 ELISP_FILE='eaw.el'
-ELISP_TEMPL='eaw-template.el'
+ELISP_HEADER='eaw-header.el'
+ELISP_FOOTER='eaw-footer.el'
 
 def main():
     code_list = read_amb_code(EAW_FILE)
@@ -116,6 +117,7 @@ def generate_locale(code_list):
 def generate_elisp(code_list):
     print('Generating %s ... ' % (ELISP_FILE), end='')
     out = open(ELISP_FILE, 'w')
+    out.write(open(ELISP_HEADER).read())
     print('(setq east-asian-ambiguous \'(', file=out)
     for (code, comment) in code_list:
         if type(code) == tuple:
@@ -124,8 +126,7 @@ def generate_elisp(code_list):
         else:
             print('  #x%04X ; %s' % (code, comment), file=out)
     print('))', file=out)
-    f = open(ELISP_TEMPL)
-    out.write(f.read())
+    out.write(open(ELISP_FOOTER).read())
     print('done')
 
 if __name__ == '__main__':
