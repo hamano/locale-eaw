@@ -61,6 +61,12 @@ def read_amb_code(fn):
             # 絵文字を全角にする
             amb = 'A'
 
+        # 0x2700〜0x27FFのWide絵文字が古いemacsで半角になる問題がある
+        # ようなので明示的に全角にする
+        if (0x2700 <= code <= 0x27FF):
+            if amb == 'W':
+                amb = 'A'
+
         if amb != 'A':
             continue
 
