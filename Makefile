@@ -1,4 +1,4 @@
-UNICODE_VER=12.0.0
+UNICODE_VER=13.0.0
 URI=http://www.unicode.org/Public/$(UNICODE_VER)/ucd
 
 all: UTF-8-EAW-FULLWIDTH.gz
@@ -25,7 +25,7 @@ install:
 	sudo install UTF-8-EAW-FULLWIDTH.gz /usr/share/i18n/charmaps/
 	sudo locale-gen
 
-clean_data:
+clean-data:
 	rm -rf UnicodeData.txt EastAsianWidth.txt EmojiSources.txt
 
 clean:
