@@ -144,3 +144,16 @@ set -ag terminal-overrides ',*:U8=0'
 ~~~
 
 * [tmuxの罫線素片をACSに強制する](https://qiita.com/yanma/items/2644e6db6f3bcf249690)
+
+# どうしてこうなったシリーズ
+
+- [₀] U+2080 SUBSCRIPT ZERO: N (neutral)
+- [₁] U+2081 SUBSCRIPT ONE - U+2084 SUBSCRIPT FOUR: A (ambiguous)
+
+- [Ō] U+014C LATIN CAPITAL LETTER O WITH MACRON: N (neutral)
+- [ō] U+014D LATIN SMALL LETTER O WITH MACRON: A (ambiguous)
+
+- [♠] U+2660 BLACK SPADE SUIT: A (ambiguous)
+- [♥] U+2665 BLACK HEART SUIT: A (ambiguous)
+- [♣] U+2663 BLACK CLUB SUIT: A (ambiguous)
+- [♦] U+2666 BLACK DIAMOND SUIT: N (neutral)
