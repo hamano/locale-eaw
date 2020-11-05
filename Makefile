@@ -9,8 +9,8 @@ UnicodeData.txt:
 EastAsianWidth.txt:
 	wget -O $@ $(URI)/$@
 
-EmojiSources.txt:
-	wget -O $@ $(URI)/$@
+emoji-data.txt:
+	wget -O $@ $(URI)/emoji/$@
 
 UTF-8: UnicodeData.txt EastAsianWidth.txt
 	./utf8_gen.py $^
@@ -26,7 +26,7 @@ install:
 	sudo locale-gen
 
 clean-data:
-	rm -rf UnicodeData.txt EastAsianWidth.txt EmojiSources.txt
+	rm -rf UnicodeData.txt EastAsianWidth.txt emoji-data.txt
 
 clean:
 	rm -rf UTF-8 UTF-8-EAW-FULLWIDTH UTF-8-EAW-FULLWIDTH.gz
