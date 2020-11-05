@@ -5,6 +5,7 @@ import sys
 import re
 
 EAW_FILE='EastAsianWidth.txt'
+EMOJI_FILE='emoji-data.txt'
 ORIGINAL_FILE='UTF-8'
 OUTPUT_FILE='UTF-8-EAW-FULLWIDTH'
 TEST_FILE='test.txt'
@@ -19,9 +20,31 @@ def main():
     generate_elisp(code_list)
     print('Generation complete.')
 
+def load_emoji(fn):
+    emoji = {}
+    line_re = re.compile('([0-9A-Fa-f\.]+)\s+;\s+(\w+)\s+(.*)')
+    with open(fn) as f:
+        for line in f:
+            if line.startswith('#'):
+                continue
+            match = line_re.match(line)
+            if not match:
+                continue
+            (code_or_range, prop, comment) = match.groups()
+            if prop != 'Emoji':
+                continue
+            if '.' in code_or_range:
+                 (start, end) = tuple(code_or_range.split('..'))
+                 for code in range(int(start, 16), int(end, 16) + 1):
+                     emoji[code] = True
+            else:
+                emoji[int(code_or_range, 16)] = True
+    return emoji
+
 def read_amb_code(fn):
+    #emoji = load_emoji(EMOJI_FILE)
     ret = []
-    line_re = re.compile('([a-fA-F\d\.]+);(\w)\s+#\s+(.*)')
+    line_re = re.compile('([0-9A-Fa-f\.]+);(\w)\s+#\s+(.*)')
     f = open(fn)
     for line in f:
         if line.startswith('#'):
@@ -56,17 +79,15 @@ def read_amb_code(fn):
         # Exclude <private-use-100000>..<private-use-10FFFD>
         if 0x100000 <= code <= 0x10FFFD:
             continue
-        # Emoji
-        if (0x2600 <= code <= 0x26FF) or \
-           (0x1F000 <= code <= 0x1FFFF):
-            # 絵文字を全角にする
-            amb = 'A'
 
-        # 0x2700〜0x27FFのWide絵文字が古いemacsで半角になる問題がある
-        # ようなので明示的に全角にする
-        if (0x2700 <= code <= 0x27FF):
-            if amb == 'W':
-                amb = 'A'
+        # Emoji
+        #is_emoji = emoji.get(code, False)
+        #print('{:x}'.format(code), is_emoji)
+        #if is_emoji and (0x2600 <= code):
+            # 絵文字を全角にする
+            #amb = 'A'
+        if (0x2600 <= code <= 0x27FF) or (0x1F000 <= code <= 0x1FFFF):
+            amb = 'A'
 
         if amb != 'A':
             continue
