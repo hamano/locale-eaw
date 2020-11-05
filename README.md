@@ -23,7 +23,7 @@ East Asian Ambiguous Width 問題とは、これらの文字をコンソール�
 たとえば以下の範囲の文字。
 この問題に対処するため、以下の範囲の文字を全角にするという対応を行いました。
 
-- U+2600 - U+26FF (☀☁☂☃)
+- U+2600 - U+27FF (☀☁☂☃)
 - U+1F000 - U+1FFFF (🀀🌶🐿🕿)
 
 この範囲以外の絵文字についてはよく分からないのでそのままにしてあります。
@@ -93,7 +93,7 @@ col_size_of_width_a = 2
 絵文字も全角にするには
 
 ~~~
-unicode_full_width_areas = U+2600-26FF,U+1F000-1FFFF
+unicode_full_width_areas = U+2600-27FF,U+1F000-1FFFF
 ~~~
 
 ## GNU screenで曖昧な文字幅を全角にする
@@ -147,12 +147,15 @@ set -ag terminal-overrides ',*:U8=0'
 
 # どうしてこうなったシリーズ
 
-- [₀] U+2080 SUBSCRIPT ZERO: N (neutral)
-- [₁] U+2081 SUBSCRIPT ONE - U+2084 SUBSCRIPT FOUR: A (ambiguous)
-
+## 大文字と小文字の違いのはずなのに
 - [Ō] U+014C LATIN CAPITAL LETTER O WITH MACRON: N (neutral)
 - [ō] U+014D LATIN SMALL LETTER O WITH MACRON: A (ambiguous)
 
+## ₀だけneutral
+- [₀] U+2080 SUBSCRIPT ZERO: N (neutral)
+- [₁] U+2081 SUBSCRIPT ONE - U+2084 SUBSCRIPT FOUR: A (ambiguous)
+
+## ♦だけneutral
 - [♠] U+2660 BLACK SPADE SUIT: A (ambiguous)
 - [♥] U+2665 BLACK HEART SUIT: A (ambiguous)
 - [♣] U+2663 BLACK CLUB SUIT: A (ambiguous)
