@@ -15,6 +15,9 @@
 (defun eaw-fullwidth ()
   (eaw-set-width 2))
 
+(defun eaw-halfwidth ()
+  (eaw-set-width 1))
+
 (provide 'eaw)
 
 ;;; eaw.el ends here
