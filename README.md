@@ -8,7 +8,7 @@ East Asian Ambiguous 文字の一覧は[こちら](https://raw.githubusercontent
 
 East Asian Ambiguous Width 問題とは、これらの文字をコンソールで表示する際に、libcの`wcwidth(3)`、ターミナルエミュレータ、テキストエディタなどがそれぞれ異なる文字幅(半角、全角)と認識するため、表示が壊れてしまう問題です。
 
-テキストエディタの場合カーソルの内部状態と表示位置がズレたりします。
+例えばテキストエディタのカーソルの表示位置と内部状態が食い違ったりします。
 
 この問題のてっとり早い解決方法のひとつは曖昧な文字の文字幅を全角で統一する事です。
 
@@ -145,18 +145,26 @@ set -ag terminal-overrides ',*:U8=0'
 
 * [tmuxの罫線素片をACSに強制する](https://qiita.com/yanma/items/2644e6db6f3bcf249690)
 
+## weztermで曖昧な文字幅を全角にする
+<https://wezfurlong.org/wezterm/config/lua/config/treat_east_asian_ambiguous_width_as_wide.html>
+
 # どうしてこうなったシリーズ
 
 ## 大文字と小文字の違いのはずなのに
 - [Ō] U+014C LATIN CAPITAL LETTER O WITH MACRON: N (neutral)
 - [ō] U+014D LATIN SMALL LETTER O WITH MACRON: A (ambiguous)
 
-## ₀だけneutral
+## ₀だけNeutral
 - [₀] U+2080 SUBSCRIPT ZERO: N (neutral)
 - [₁] U+2081 SUBSCRIPT ONE - U+2084 SUBSCRIPT FOUR: A (ambiguous)
 
-## ♦だけneutral
+## ♦だけNeutral(カードゲームが出来ない…)
 - [♠] U+2660 BLACK SPADE SUIT: A (ambiguous)
 - [♥] U+2665 BLACK HEART SUIT: A (ambiguous)
 - [♣] U+2663 BLACK CLUB SUIT: A (ambiguous)
 - [♦] U+2666 BLACK DIAMOND SUIT: N (neutral)
+
+## 小文字ローマ数字の11と12だけNeutral
+- [ⅺ] U+217A SMALL ROMAN NUMERAL ELEVEN: N (neutral)
+- [ⅻ] U+217B SMALL ROMAN NUMERAL TWELVE: N (neutral)
+
