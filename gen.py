@@ -4,8 +4,8 @@
 import sys
 import re
 
-EAW_FILE='EastAsianWidth.txt'
-EMOJI_FILE='emoji-data.txt'
+EAW_FILE='ucd/EastAsianWidth.txt'
+EMOJI_FILE='ucd/emoji/emoji-data.txt'
 ORIGINAL_FILE='UTF-8'
 OUTPUT_FILE='UTF-8-EAW-FULLWIDTH'
 TEST_FILE='test.txt'

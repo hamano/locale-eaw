@@ -1,24 +1,31 @@
 UNICODE_VER=14.0.0
-URI=http://www.unicode.org/Public/$(UNICODE_VER)/ucd
+URI=http://www.unicode.org/Public/$(UNICODE_VER)
 
 all: UTF-8-EAW-FULLWIDTH.gz
 
-UnicodeData.txt:
-	wget -O $@ $(URI)/$@
+ucd:
+	mkdir -p ucd ucd/emoji
 
-EastAsianWidth.txt:
-	wget -O $@ $(URI)/$@
+ucd/UnicodeData.txt: | ucd
+	test -f $@ || curl -L -o $@ $(URI)/$@
 
-PropList.txt:
-	wget -O $@ $(URI)/$@
+ucd/EastAsianWidth.txt: | ucd
+	test -f $@ || curl -L -o $@ $(URI)/$@
 
-emoji-data.txt:
-	wget -O $@ $(URI)/emoji/$@
+ucd/PropList.txt: | ucd
+	test -f $@ || curl -L -o $@ $(URI)/$@
 
-UTF-8: UnicodeData.txt EastAsianWidth.txt
-	./utf8_gen.py -u UnicodeData.txt -e EastAsianWidth.txt --unicode_version $(UNICODE_VER)
+ucd/emoji/emoji-data.txt: | ucd
+	test -f $@ || curl -L -o $@ $(URI)/$@
 
-UTF-8-EAW-FULLWIDTH: UTF-8 EastAsianWidth.txt
+UTF-8: ucd/UnicodeData.txt ucd/EastAsianWidth.txt ucd/PropList.txt
+	./utf8_gen.py \
+		-u ucd/UnicodeData.txt \
+		-e ucd/EastAsianWidth.txt \
+		-p ucd/PropList.txt \
+		--unicode_version $(UNICODE_VER)
+
+UTF-8-EAW-FULLWIDTH: UTF-8 ucd/EastAsianWidth.txt
 	./gen.py
 
 UTF-8-EAW-FULLWIDTH.gz: UTF-8-EAW-FULLWIDTH
@@ -29,7 +36,7 @@ install:
 	sudo locale-gen
 
 clean-data:
-	rm -rf UnicodeData.txt EastAsianWidth.txt emoji-data.txt
+	rm -rf ucd
 
 clean:
 	rm -rf UTF-8 UTF-8-EAW-FULLWIDTH UTF-8-EAW-FULLWIDTH.gz
