@@ -32,7 +32,7 @@ UTF-8-EAW-FULLWIDTH.gz: UTF-8-EAW-FULLWIDTH
 	gzip -9 -c $^ > $@
 
 install:
-	sudo install UTF-8-EAW-FULLWIDTH.gz /usr/share/i18n/charmaps/
+	sudo install dist/UTF-8-EAW-FULLWIDTH.gz dist/UTF-8-EAW-CONSOLE.gz /usr/share/i18n/charmaps/
 	sudo locale-gen
 
 clean-data:
