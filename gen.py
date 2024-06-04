@@ -75,6 +75,14 @@ def filter_block_elements(code_comment):
         return False
     return True
 
+def filter_geometric_shapes(code_comment):
+    code = code_comment[0]
+    comment = code_comment[1]
+    # GEOMETRIC SHAPES
+    if 0x25A0 <= code <= 0x25FF:
+        return False
+    return True
+
 def generate_flavor(config, amb_list):
     flavor = config.name
     print(f'Generating {flavor}')
@@ -82,18 +90,22 @@ def generate_flavor(config, amb_list):
     #print(len(wide_list))
     amb = config.getint('amb', 1)
     emoji = config.getint('emoji', 1)
-    
+
     private = config.getint('private', 1)
     if private == 1:
         wide_list = list(filter(filter_private, wide_list))
-    
+
     box_drawing = config.getint('box_drawing', amb)
     if box_drawing == 1:
         wide_list = list(filter(filter_box_drawing, wide_list))
-    
+
     block_elements = config.getint('block_elements', amb)
     if block_elements == 1:
         wide_list = list(filter(filter_block_elements, wide_list))
+
+    geometric_shapes = config.getint('geometric_shapes', amb)
+    if geometric_shapes == 1:
+        wide_list = list(filter(filter_geometric_shapes, wide_list))
     #print(len(wide_list))
     generate_locale(f'dist/UTF-8-{flavor}', wide_list)
 
