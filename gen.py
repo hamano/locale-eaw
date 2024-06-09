@@ -21,8 +21,10 @@ def main():
     generate_list('test/eaw.txt', amb_list)
     config = configparser.ConfigParser()
     config.read('config.ini')
-    generate_flavor(config['EAW-FULLWIDTH'], amb_list)
-    generate_flavor(config['EAW-CONSOLE'], amb_list)
+    for name in config:
+        if name == 'DEFAULT':
+            continue
+        generate_flavor(config[name], amb_list)
     sys.exit()
     generate_elisp(code_list)
     print('Generation complete.')
