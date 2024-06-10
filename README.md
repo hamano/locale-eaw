@@ -16,6 +16,8 @@ East Asian Ambiguous Width 問題とは、これらの文字をコンソール�
 
 対応方法はアプリケーションによって様々ですが、xterm, mlterm, vimなどを使っている人は設定やオプションを指定するだけで文字幅を変更することができます。
 
+また、libc localeを修正することでrxvt-unicodeのようなアプリの文字幅を変更できます。
+
 詳細は[README-EAW-FULLWIDTH.md](README-EAW-FULLWIDTH.md)を参照してください。
 
 ## 解決方法その2: 文字毎に最適な文字幅を設定する
@@ -38,12 +40,23 @@ East Asian Ambiguous Width 問題とは、これらの文字をコンソール�
 これが可能なアプリケーションは、
 - libcの`wcwidth(3)`を利用するアプリケーション
   - rxvt-unicode
+  - bash, zshなどのシェル
+- mlterm
 - emacs
 - 最近のvim
-- mlterm
 
 などです。
-各文字毎に文字幅を設定するのは大変ですが、このレポジトリではこれを実現するために役立つツールを提供します。
+各文字毎に文字幅を設定するのは大変ですが、このレポジトリではこれを実現するために役立つツールとおすすめのロケール`UTF-8-EAW-CONSOLE`を提供します。
+
+このロケールは曖昧な文字を全角にしつつも罫線やブロック要素は半角にしたい、というような人におすすめです。
+
+`UTF-8-EAW-FULLWIDTH`や`UTF-8-EAW-CONSOLE`というロケールのフレーバーは[config.ini](config.ini)に定義しておりこれらが気に入らない場合、以下のようにしてカスタマイズできます。
+
+```
+[EAW-CUSTOM]
+eaw = 2
+...
+```
 
 # どうしてこうなったシリーズ
 
