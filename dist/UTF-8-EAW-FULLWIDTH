@@ -49959,7 +49959,7 @@ WIDTH
 <U000E0001>	0
 <U000E0020>...<U000E007F>	0
 <U000E0100>...<U000E01EF>	0
-% Added East Asian Width
+% Added By locale-eaw
 <U00A1> 2 % Po         INVERTED EXCLAMATION MARK
 <U00A4> 2 % Sc         CURRENCY SIGN
 <U00A7> 2 % Po         SECTION SIGN
