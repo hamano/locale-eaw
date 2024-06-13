@@ -28,9 +28,6 @@ UTF-8: ucd/UnicodeData.txt ucd/EastAsianWidth.txt ucd/PropList.txt
 UTF-8-EAW-FULLWIDTH: UTF-8 ucd/EastAsianWidth.txt
 	./gen.py
 
-UTF-8-EAW-FULLWIDTH.gz: UTF-8-EAW-FULLWIDTH
-	gzip -9 -c $^ > $@
-
 install:
 	sudo install dist/UTF-8-EAW-FULLWIDTH.gz dist/UTF-8-EAW-CONSOLE.gz /usr/share/i18n/charmaps/
 	sudo locale-gen
