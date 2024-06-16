@@ -15,16 +15,19 @@ ELISP_HEADER = 'eaw-header.el'
 ELISP_FOOTER = 'eaw-footer.el'
 
 def main():
-    amb_list = load_amb_list(EAW_FILE)
+    amb_list, comment_map = load_amb_list(EAW_FILE)
     # COMBINING CHARACTERを除外
     amb_list = list(filter(filter_combining, amb_list))
-    generate_list('test/eaw.txt', amb_list)
+    #amb_list = amb_list[0:20]
+    generate_list('test/eaw.txt', amb_list, comment_map)
+    nerdfont_list = load_nerdfont_list()
+    generate_list('test/nerdfont.txt', nerdfont_list, comment_map)
     config = configparser.ConfigParser()
     config.read('config.ini')
     for name in config:
         if name == 'DEFAULT':
             continue
-        generate_flavor(config[name], amb_list)
+        generate_flavor(config[name], amb_list, comment_map)
     sys.exit()
     generate_elisp(code_list)
     print('Generation complete.')
@@ -33,33 +36,34 @@ def generate_all():
     for section in config.sections():
         generate_flavor(config[section])
 
-def filter_combining(code_comment):
-    code = code_comment[0]
-    comment = code_comment[1]
+def filter_combining(code):
     # COMBINING CHARACTER
     if 0x0300 <= code <= 0x036F:
         return False
     return True
 
-def filter_private(code_comment):
-    code = code_comment[0]
-    comment = code_comment[1]
+def load_private_list():
+    ret = []
     # <private-use-E000>..<private-use-F8FF>
-    if 0xE000 <= code <= 0xF8FF:
-        return False
-    # <private-use-E000>..<private-use-F8FF>
-    if 0xFE00 <= code <= 0xFE0F:
-        return False
-    # Exclude VARIATION SELECTOR-17..VARIATION SELECTOR-256
-    if 0xE0100 <= code <= 0xE01EF:
-        return False
-    # Exclude <private-use-F0000>..<private-use-FFFFD>
-    if 0xF0000 <= code <= 0xFFFFD:
-        return False
-    # Exclude <private-use-100000>..<private-use-10FFFD>
-    if 0x100000 <= code <= 0x10FFFD:
-        return False
-    return True
+    ret.extend(range(0xE000, 0xF8FF + 1))
+    # <private-use-FE00>..<private-use-F8FF>
+    ret.extend(range(0xFE00, 0xFE0F + 1))
+    # VARIATION SELECTOR-17..VARIATION SELECTOR-256
+    ret.extend(range(0xE0100, 0xE01EF + 1))
+    # <private-use-F0000>..<private-use-FFFFD>
+    ret.extend(range(0xF0000, 0xFFFFD + 1))
+    # <private-use-100000>..<private-use-10FFFD>
+    ret.extend(range(0x100000, 0x10FFFD + 1))
+    return ret
+
+def load_nerdfont_list():
+    ret = []
+    with open('nerdfont/list.txt') as f:
+        for line in f:
+            if line.startswith('#'):
+                continue
+            ret.append(int(line, 16))
+    return ret
 
 def filter_box_drawing(code_comment):
     code = code_comment[0]
@@ -85,17 +89,36 @@ def filter_geometric_shapes(code_comment):
         return False
     return True
 
-def generate_flavor(config, amb_list):
+def set_width(width_map, width_list, width):
+    for code in width_list:
+        width_map[code] = width
+    return
+
+def generate_flavor(config, amb_list, comment_map):
     flavor = config.name
     print(f'Generating {flavor}')
+    width_map = {}
     wide_list = amb_list.copy()
+    #for code in amb_list:
+    #    print(code)
+
     #print(len(wide_list))
     amb = config.getint('amb', 1)
-    emoji = config.getint('emoji', 1)
+    set_width(width_map, amb_list, amb)
+
+    #emoji = config.getint('emoji', 1)
 
     private = config.getint('private', 1)
-    if private == 1:
-        wide_list = list(filter(filter_private, wide_list))
+    private_list = load_private_list()
+    set_width(width_map, private_list, private)
+
+    nerdfont = config.getint('nerdfont')
+    if nerdfont:
+        nerdfont_list = load_nerdfont_list()
+        set_width(width_map, nerdfont_list, nerdfont)
+
+    generate_locale(f'dist/UTF-8-{flavor}', width_map, comment_map)
+    return
 
     box_drawing = config.getint('box_drawing', amb)
     if box_drawing == 1:
@@ -109,7 +132,7 @@ def generate_flavor(config, amb_list):
     if geometric_shapes == 1:
         wide_list = list(filter(filter_geometric_shapes, wide_list))
     #print(len(wide_list))
-    generate_locale(f'dist/UTF-8-{flavor}', wide_list)
+
 
 def load_emoji(fn):
     emoji = {}
@@ -135,6 +158,7 @@ def load_emoji(fn):
 def load_amb_list(fn):
     #emoji = load_emoji(EMOJI_FILE)
     ret = []
+    comment_map = {}
     line_re = re.compile('([0-9A-Fa-f\.]+);(\w)\s+#\s+(.*)')
     f = open(fn)
     for line in f:
@@ -166,25 +190,24 @@ def load_amb_list(fn):
 
         if '.' in code_or_range:
             for i in range(int(start, 16), int(end, 16) + 1):
-                ret.append((i, comment))
-            #ret.append(((int(start, 16), int(end, 16)), comment))
+                #ret.append((i, comment))
+                ret.append(i)
+                comment_map[i] = comment
         else:
-            ret.append((code, comment))
+            #ret.append((code, comment))
+            ret.append(code)
+            comment_map[code] = comment
     f.close()
-    return ret
+    return ret, comment_map
 
-def generate_list(path, code_list):
+def generate_list(path, code_list, comment_map):
     print(f'Generating {path} ... ', end='')
     out = open(path, 'w', encoding='UTF-8')
 
-    for (code, comment) in code_list:
-        if type(code) == tuple:
-            for n in range(code[0], code[1] + 1):
-                c = chr(n)
-                print('[%c] U+%04X %s' % (c, n, comment), file=out)
-        else:
-            c = chr(code)
-            print('[%c] U+%04X %s' % (c, code, comment), file=out)
+    for code in code_list:
+        comment = comment_map.get(code, 'none')
+        c = chr(code)
+        print('[%c] U+%04X %s' % (c, code, comment), file=out)
     print('done')
 
 def print_locale(out, n, comment):
@@ -193,18 +216,16 @@ def print_locale(out, n, comment):
     else:
         print('<U%08X> 2 %% %s' % (n, comment), file=out)
 
-def generate_locale(path, code_list):
+def generate_locale(path, width_map, comment_map):
     print(f'Generating {path} ... ', end='')
     out = open(path, 'w')
     f = open(ORIGINAL_FILE)
     for line in f:
         if line.startswith('END WIDTH'):
-            out.write('% Added East Asian Width\n')
-            for (code, comment) in code_list:
-                if type(code) == tuple:
-                    for n in range(code[0], code[1] + 1):
-                        print_locale(out, n, comment)
-                else:
+            out.write('% Added By locale-eaw\n')
+            for code, width in sorted(width_map.items()):
+                comment = comment_map.get(code, "none")
+                if width == 2:
                     print_locale(out, code, comment)
         print(line, end='', file=out)
     f.close()
