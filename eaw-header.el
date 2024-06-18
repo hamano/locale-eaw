@@ -4,5 +4,5 @@
 ;; Version: 12
 ;; MIT License
 
-;;; Code:
+(provide '{})
 
