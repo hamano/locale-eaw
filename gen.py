@@ -10,9 +10,6 @@ import shutil
 EAW_FILE = 'ucd/EastAsianWidth.txt'
 EMOJI_FILE = 'ucd/emoji/emoji-data.txt'
 ORIGINAL_FILE = 'UTF-8'
-ELISP_FILE = 'eaw.el'
-ELISP_HEADER = 'eaw-header.el'
-ELISP_FOOTER = 'eaw-footer.el'
 
 def main():
     amb_list, comment_map = load_amb_list(EAW_FILE)
@@ -115,7 +112,7 @@ def generate_flavor(config, amb_list, comment_map):
         set_width(width_map, nerdfont_list, nerdfont)
 
     generate_locale(f'dist/UTF-8-{flavor}', width_map, comment_map)
-    #generate_elisp(code_list)
+    generate_elisp(config, width_map, comment_map)
     generate_vimrc(f'dist/{flavor.lower()}.vim', width_map, comment_map)
     return
 
@@ -235,6 +232,26 @@ def generate_locale(path, width_map, comment_map):
             shutil.copyfileobj(locale_file, locale_file_gz)
     print('done')
 
+def generate_elisp(config, width_map, comment_map):
+    flavor = config.name.lower()
+    path = f'dist/{flavor}.el'
+    print(f'Generating {path} ... ', end='')
+    out = open(path, 'w')
+    header = open('eaw-header.el').read()
+    out.write(header.format(flavor))
+    print('(setq code-half \'(', file=out)
+    for code, width in sorted(width_map.items()):
+        if width == 1:
+            print('  #x%04X' % (code), file=out)
+    print('))', file=out)
+    print('(setq code-wide \'(', file=out)
+    for code, width in sorted(width_map.items()):
+        if width == 2:
+            print('  #x%04X' % (code), file=out)
+    print('))', file=out)
+    out.write(open('eaw-footer.el').read())
+    print('done')
+
 def generate_vimrc(path, width_map, comment_map):
     print(f'Generating {path} ... ', end='')
     out = open(path, 'w')
@@ -245,21 +262,6 @@ def generate_vimrc(path, width_map, comment_map):
         print(f'\[{hex(code)},{hex(code)},{width}],', file=out)
     out.write('\])')
     out.close()
-    print('done')
-
-def generate_elisp(code_list):
-    print('Generating %s ... ' % (ELISP_FILE), end='')
-    out = open(ELISP_FILE, 'w')
-    out.write(open(ELISP_HEADER).read())
-    print('(setq east-asian-ambiguous \'(', file=out)
-    for (code, comment) in code_list:
-        if type(code) == tuple:
-            for n in range(code[0], code[1] + 1):
-                print('  #x%04X ; %s' % (n, comment), file=out)
-        else:
-            print('  #x%04X ; %s' % (code, comment), file=out)
-    print('))', file=out)
-    out.write(open(ELISP_FOOTER).read())
     print('done')
 
 if __name__ == '__main__':
