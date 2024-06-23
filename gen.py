@@ -90,21 +90,20 @@ def set_width(width_map, width_list, width):
 
 def generate_flavor(config, amb_list, comment_map):
     flavor = config.name
-    print(f'Generating {flavor}')
+    print(f'# {flavor} Flavor')
     width_map = {}
     wide_list = amb_list.copy()
-    #for code in amb_list:
-    #    print(code)
 
-    #print(len(wide_list))
-    amb = config.getint('amb', 1)
-    set_width(width_map, amb_list, amb)
+    amb = config.getint('amb')
+    if amb:
+        set_width(width_map, amb_list, amb)
 
     #emoji = config.getint('emoji', 1)
 
-    private = config.getint('private', 1)
-    private_list = load_private_list()
-    set_width(width_map, private_list, private)
+    private = config.getint('private')
+    if private:
+        private_list = load_private_list()
+        set_width(width_map, private_list, private)
 
     nerdfont = config.getint('nerdfont')
     if nerdfont:
