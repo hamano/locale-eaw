@@ -88,6 +88,26 @@ def set_width(width_map, width_list, width):
         width_map[code] = width
     return
 
+# 連続したコードポイントをレンジ形式にする
+def range_compress(width_map):
+    ret = []
+    code_list = sorted(width_map.keys())
+    start = code_list[0]
+    end = code_list[0]
+    end_width = width_map[end]
+    for code in code_list[1:]:
+        width = width_map[code]
+        if code == end + 1 and width == end_width:
+            end = code
+            end_width = width
+        else:
+            ret.append((start, end, end_width))
+            start = code
+            end = code
+            end_width = width
+    ret.append((start, end, end_width))
+    return ret
+
 def generate_flavor(config, amb_list, comment_map):
     flavor = config.name
     print(f'# {flavor} Flavor')
@@ -110,7 +130,8 @@ def generate_flavor(config, amb_list, comment_map):
         nerdfont_list = load_nerdfont_list()
         set_width(width_map, nerdfont_list, nerdfont)
 
-    generate_locale(f'dist/UTF-8-{flavor}', width_map, comment_map)
+    width_list = range_compress(width_map)
+    generate_locale(config, width_list)
     generate_elisp(config, width_map, comment_map)
     generate_vimrc(f'dist/{flavor.lower()}.vim', width_map, comment_map)
     return
@@ -204,25 +225,33 @@ def generate_list(path, code_list, comment_map):
         print('[%c] U+%04X %s' % (c, code, comment), file=out)
     print('done')
 
-def print_locale(out, n, comment):
-    if n <= 0xffff:
-        print('<U%04X> 2 %% %s' % (n, comment), file=out)
+def print_locale(out, start, end):
+    if end <= 0xffff:
+        octet = 4
     else:
-        print('<U%08X> 2 %% %s' % (n, comment), file=out)
+        octet = 8
+    if start == end:
+        print(f'<U{start:0{octet}X}> 2', file=out)
+    else:
+        print(f'<U{start:0{octet}X}>...<U{end:0{octet}X}> 2', file=out)
 
-def generate_locale(path, width_map, comment_map):
+def generate_locale(config, width_list):
+    flavor = config.name
+    path = f'dist/UTF-8-{flavor}'
     print(f'Generating {path} ... ', end='')
     out = open(path, 'w')
-    f = open(ORIGINAL_FILE)
-    for line in f:
+    orig = open(ORIGINAL_FILE)
+    for line in orig:
         if line.startswith('END WIDTH'):
-            out.write('% Added By locale-eaw\n')
-            for code, width in sorted(width_map.items()):
-                comment = comment_map.get(code, "none")
-                if width == 2:
-                    print_locale(out, code, comment)
+            break
         print(line, end='', file=out)
-    f.close()
+    orig.close()
+    out.write('% Added By locale-eaw\n')
+    for start, end, width in width_list:
+        #comment = comment_map.get(code, "none")
+        if width == 2:
+            print_locale(out, start, end)
+    out.write('END WIDTH\n')
     out.close()
     print('done')
     print(f'Generating {path}.gz ... ', end='')
