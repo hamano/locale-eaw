@@ -227,7 +227,7 @@ def generate_locale(path, width_map, comment_map):
     print('done')
     print(f'Generating {path}.gz ... ', end='')
     with open(path, 'rb') as locale_file:
-        with gzip.open(f'{path}.gz', 'wb') as locale_file_gz:
+        with gzip.GzipFile(f'{path}.gz', 'wb', mtime=0) as locale_file_gz:
             shutil.copyfileobj(locale_file, locale_file_gz)
     print('done')
 
