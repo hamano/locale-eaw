@@ -130,7 +130,7 @@ def generate_flavor(config, amb_list, comment_map):
 
     width_list = range_compress(width_map)
     generate_locale(config, width_list)
-    generate_elisp(config, width_map, comment_map)
+    generate_elisp(config, width_list)
     generate_vimrc(config, width_list)
     return
 
@@ -258,7 +258,7 @@ def generate_locale(config, width_list):
             shutil.copyfileobj(locale_file, locale_file_gz)
     print('done')
 
-def generate_elisp(config, width_map, comment_map):
+def generate_elisp(config, width_list):
     flavor = config.name.lower()
     path = f'dist/{flavor}.el'
     print(f'Generating {path} ... ', end='')
@@ -266,14 +266,20 @@ def generate_elisp(config, width_map, comment_map):
     header = open('eaw-header.el').read()
     out.write(header.format(flavor))
     print('(setq code-half \'(', file=out)
-    for code, width in sorted(width_map.items()):
+    for start, end, width in width_list:
         if width == 1:
-            print('  #x%04X' % (code), file=out)
+            if start == end:
+                print(f'  #x{start:x}', file=out)
+            else:
+                print(f'  (#x{start:x}.#x{end:x})', file=out)
     print('))', file=out)
     print('(setq code-wide \'(', file=out)
-    for code, width in sorted(width_map.items()):
+    for start, end, width in width_list:
         if width == 2:
-            print('  #x%04X' % (code), file=out)
+            if start == end:
+                print(f'  #x{start:x}', file=out)
+            else:
+                print(f'  (#x{start:x}.#x{end:x})', file=out)
     print('))', file=out)
     out.write(open('eaw-footer.el').read())
     print('done')
