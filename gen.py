@@ -9,7 +9,7 @@ import shutil
 
 EAW_FILE = 'ucd/EastAsianWidth.txt'
 EMOJI_FILE = 'ucd/emoji/emoji-data.txt'
-ORIGINAL_FILE = 'UTF-8'
+ORIGINAL_FILE = 'ucd/UTF-8'
 
 def main():
     amb_list, comment_map = load_amb_list(EAW_FILE)
@@ -172,13 +172,14 @@ def load_amb_list(fn):
     #emoji = load_emoji(EMOJI_FILE)
     ret = []
     comment_map = {}
-    line_re = re.compile('([0-9A-Fa-f\.]+);(\w)\s+#\s+(.*)')
+    line_re = re.compile('([0-9A-Fa-f\.]+)\s*;\s*(\w+)\s+#\s+(.*)')
     f = open(fn)
     for line in f:
         if line.startswith('#'):
             continue
         match = line_re.match(line)
         if not match:
+            print(f'unexpected format: {line}', file=sys.stderr)
             continue
         (code_or_range, amb, comment) = match.groups()
         if '.' in code_or_range:
@@ -188,15 +189,6 @@ def load_amb_list(fn):
         else:
             # single code
             code = int(code_or_range, 16)
-
-        # Emoji
-        #is_emoji = emoji.get(code, False)
-        #print('{:x}'.format(code), is_emoji)
-        #if is_emoji and (0x2600 <= code):
-            # 絵文字を全角にする
-            #amb = 'A'
-#        if (0x2600 <= code <= 0x27FF) or (0x1F000 <= code <= 0x1FFFF):
-#            amb = 'A'
 
         if amb != 'A':
             continue
