@@ -1,29 +1,7 @@
-UNICODE_VER=14.0.0
-URI=http://www.unicode.org/Public/$(UNICODE_VER)
-
 all: UTF-8-EAW-FULLWIDTH.gz
 
-ucd:
-	mkdir -p ucd ucd/emoji
-
-ucd/UnicodeData.txt: | ucd
-	test -f $@ || curl -L -o $@ $(URI)/$@
-
-ucd/EastAsianWidth.txt: | ucd
-	test -f $@ || curl -L -o $@ $(URI)/$@
-
-ucd/PropList.txt: | ucd
-	test -f $@ || curl -L -o $@ $(URI)/$@
-
-ucd/emoji/emoji-data.txt: | ucd
-	test -f $@ || curl -L -o $@ $(URI)/$@
-
-UTF-8: ucd/UnicodeData.txt ucd/EastAsianWidth.txt ucd/PropList.txt
-	./utf8_gen.py \
-		-u ucd/UnicodeData.txt \
-		-e ucd/EastAsianWidth.txt \
-		-p ucd/PropList.txt \
-		--unicode_version $(UNICODE_VER)
+ucd/UTF-8:
+	make -C ucd
 
 UTF-8-EAW-FULLWIDTH: UTF-8 ucd/EastAsianWidth.txt
 	./gen.py
