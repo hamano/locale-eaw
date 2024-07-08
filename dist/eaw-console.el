@@ -326,6 +326,8 @@
 ))
 
 (defun eaw-init ()
+  (when (= emacs-major-version 22)
+    (utf-translate-cjk-set-unicode-range code-wide))
   (when (>= emacs-major-version 23)
     (while (char-table-parent char-width-table)
       (setq char-width-table (char-table-parent char-width-table)))
