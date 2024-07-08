@@ -7,9 +7,10 @@ import configparser
 import gzip
 import shutil
 
-EAW_FILE = 'ucd/EastAsianWidth.txt'
-EMOJI_FILE = 'ucd/emoji/emoji-data.txt'
-ORIGINAL_FILE = 'ucd/UTF-8'
+UCD_DIR='./ucd'
+EAW_FILE = f'{UCD_DIR}/EastAsianWidth.txt'
+EMOJI_FILE = f'{UCD_DIR}/emoji/emoji-data.txt'
+ORIGINAL_FILE = f'{UCD_DIR}/UTF-8'
 
 def main():
     amb_list, comment_map = load_amb_list(EAW_FILE)
