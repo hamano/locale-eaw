@@ -1,27 +1,24 @@
-#UNICODE_VER=15.1.0
-UNICODE_VER=14.0.0
+UNICODE_VER=15.1.0
 URI=http://www.unicode.org/Public/$(UNICODE_VER)/ucd
 
 all: UTF-8
 
-UnicodeData.txt:
-	test -f $@ || curl -L -o $@ $(URI)/$@
-
-EastAsianWidth.txt:
-	test -f $@ || curl -L -o $@ $(URI)/$@
-
-PropList.txt:
+UnicodeData.txt EastAsianWidth.txt DerivedCoreProperties.txt HangulSyllableType.txt:
 	test -f $@ || curl -L -o $@ $(URI)/$@
 
 emoji/emoji-data.txt:
 	mkdir -p emoji
 	test -f $@ || curl -L -o $@ $(URI)/$@
 
-UTF-8: UnicodeData.txt EastAsianWidth.txt PropList.txt emoji/emoji-data.txt
+utf8_gen.py:
+	test -f $@ || curl -L -o $@ https://raw.githubusercontent.com/bminor/glibc/e3b0b3484cac61f9eae373751ac6eaf816a2c9c3/localedata/unicode-gen/utf8_gen.py
+
+UTF-8: UnicodeData.txt EastAsianWidth.txt DerivedCoreProperties.txt HangulSyllableType.txt
 	./utf8_gen.py \
 		-u UnicodeData.txt \
+		-d DerivedCoreProperties.txt \
 		-e EastAsianWidth.txt \
-		-p PropList.txt \
+		-k HangulSyllableType.txt \
 		--unicode_version $(UNICODE_VER)
 
 clean:
