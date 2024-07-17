@@ -12,30 +12,106 @@ EAW_FILE = f'{UCD_DIR}/EastAsianWidth.txt'
 EMOJI_FILE = f'{UCD_DIR}/emoji/emoji-data.txt'
 ORIGINAL_FILE = f'{UCD_DIR}/UTF-8'
 
+class UCD:
+    def __init__(self, ucd_dir):
+        self.ucd_dir = ucd_dir
+
+        self.load_unicode_data()
+        self.load_amb()
+        self.blocks = {}
+        #self.blocks['amb'] = self.amb
+
+    def get_block(self, name):
+        return self.blocks.get(name)
+
+    def get_name(self, code):
+        data = self.unicode_data.get(code)
+        if data:
+            return data['name']
+        for data_range in self.unicode_data_range:
+            if data_range['first'] <= code <= data_range['last']:
+                return data_range['name']
+        return None
+
+    def load_unicode_data(self):
+        self.unicode_data = {}
+        self.unicode_data_range = []
+        path = f'{self.ucd_dir}/UnicodeData.txt'
+        with open(path, mode='r') as f:
+            for line in f:
+                #print(line)
+                row = line.split(';')
+                if row[1].endswith(', First>'):
+                    first = row
+                    continue
+                if row[1].endswith(', Last>'):
+                    self.unicode_data_range.append({
+                        'first': int(first[0], 16),
+                        'last': int(row[0], 16),
+                        'name': first[1].removeprefix('<').removesuffix(', First>'),
+                        'category': first[2],
+                        'combining': first[3],
+                        'comment': first[11],
+                    })
+                    continue
+                self.unicode_data[int(row[0], 16)] = {
+                    'name': row[1],
+                    'category': row[2],
+                    'combining': row[3],
+                    'comment': row[11],
+                }
+
+    def load_amb(self):
+        path = f'{self.ucd_dir}/EastAsianWidth.txt'
+        self.amb = []
+        line_re = re.compile('([0-9A-Fa-f\.]+)\s*;\s*(\w+)\s+#\s+(.*)')
+        f = open(path)
+        for line in f:
+            if line.startswith('#'):
+                continue
+            match = line_re.match(line)
+            if not match:
+                print(f'unexpected format: {line}', file=sys.stderr)
+                continue
+            (code_or_range, eaw, comment) = match.groups()
+            if '.' in code_or_range:
+                # range code
+                (first, last) = tuple(code_or_range.split('..'))
+                code = int(first, 16)
+            else:
+                # single code
+                code = int(code_or_range, 16)
+
+            if eaw != 'A':
+                continue
+
+            # exclude COMBINING CHARACTER
+            if code == 0x0300:
+                continue
+
+            if '.' in code_or_range:
+                for i in range(int(first, 16), int(last, 16) + 1):
+                    self.amb.append(i)
+            else:
+                self.amb.append(code)
+        f.close()
+
 def main():
-    amb_list, comment_map = load_amb_list(EAW_FILE)
-    # COMBINING CHARACTERを除外
-    amb_list = list(filter(filter_combining, amb_list))
-    generate_list('test/eaw.txt', amb_list, comment_map)
+    ucd = UCD(UCD_DIR)
+    generate_list('test/amb.txt', ucd.amb, ucd)
     nerdfont_list = load_nerdfont_list()
-    generate_list('test/nerdfont.txt', nerdfont_list, comment_map)
+    generate_list('test/nerdfont.txt', nerdfont_list, ucd)
     config = configparser.ConfigParser()
     config.read('config.ini')
     for name in config:
         if name == 'DEFAULT':
             continue
-        generate_flavor(config[name], amb_list, comment_map)
+        generate_flavor(config[name], ucd)
     print('Generation complete.')
 
 def generate_all():
     for section in config.sections():
         generate_flavor(config[section])
-
-def filter_combining(code):
-    # COMBINING CHARACTER
-    if 0x0300 <= code <= 0x036F:
-        return False
-    return True
 
 def load_private_list():
     ret = []
@@ -109,25 +185,25 @@ def range_compress(width_map):
     ret.append((start, end, end_width))
     return ret
 
-def generate_flavor(config, amb_list, comment_map):
+def generate_flavor(config, ucd):
     flavor = config.name
     print(f'# {flavor} Flavor')
     width_map = {}
-    wide_list = amb_list.copy()
 
-    amb = config.getint('amb')
-    if amb:
-        set_width(width_map, amb_list, amb)
-
-    private = config.getint('private')
-    if private:
-        private_list = load_private_list()
-        set_width(width_map, private_list, private)
-
-    nerdfont = config.getint('nerdfont')
-    if nerdfont:
-        nerdfont_list = load_nerdfont_list()
-        set_width(width_map, nerdfont_list, nerdfont)
+    for key in config:
+        if key.lower() == 'amb':
+            amb = config.getint('amb')
+            set_width(width_map, ucd.amb, amb)
+        elif key.lower() == 'private':
+            private_list = load_private_list()
+            private = config.getint('private')
+            set_width(width_map, private_list, private)
+        elif key.lower() == 'nerdfont':
+            nerdfont = config.getint('nerdfont')
+            nerdfont_list = load_nerdfont_list()
+            set_width(width_map, nerdfont_list, nerdfont)
+        else:
+            print(f'warning: unknown char block {key}', file=sys.stderr)
 
     width_list = range_compress(width_map)
     generate_locale(config, width_list)
@@ -169,51 +245,16 @@ def load_emoji(fn):
                 emoji[int(code_or_range, 16)] = True
     return emoji
 
-def load_amb_list(fn):
-    #emoji = load_emoji(EMOJI_FILE)
-    ret = []
-    comment_map = {}
-    line_re = re.compile('([0-9A-Fa-f\.]+)\s*;\s*(\w+)\s+#\s+(.*)')
-    f = open(fn)
-    for line in f:
-        if line.startswith('#'):
-            continue
-        match = line_re.match(line)
-        if not match:
-            print(f'unexpected format: {line}', file=sys.stderr)
-            continue
-        (code_or_range, amb, comment) = match.groups()
-        if '.' in code_or_range:
-            # range code
-            (start, end) = tuple(code_or_range.split('..'))
-            code = int(start, 16)
-        else:
-            # single code
-            code = int(code_or_range, 16)
 
-        if amb != 'A':
-            continue
 
-        if '.' in code_or_range:
-            for i in range(int(start, 16), int(end, 16) + 1):
-                #ret.append((i, comment))
-                ret.append(i)
-                comment_map[i] = comment
-        else:
-            #ret.append((code, comment))
-            ret.append(code)
-            comment_map[code] = comment
-    f.close()
-    return ret, comment_map
-
-def generate_list(path, code_list, comment_map):
+def generate_list(path, code_list, ucd):
     print(f'Generating {path} ... ', end='')
     out = open(path, 'w', encoding='UTF-8')
 
     for code in code_list:
-        comment = comment_map.get(code, 'none')
+        name = ucd.get_name(code)
         c = chr(code)
-        print('[%c] U+%04X %s' % (c, code, comment), file=out)
+        print(f'[{c}] U+{code:04X} {name}', file=out)
     print('done')
 
 def print_locale(out, start, end):
