@@ -15,9 +15,9 @@ ORIGINAL_FILE = f'{UCD_DIR}/UTF-8'
 class UCD:
     def __init__(self, ucd_dir):
         self.ucd_dir = ucd_dir
-
         self.load_unicode_data()
         self.load_amb()
+        self.load_nerdfont()
         self.blocks = {}
         #self.blocks['amb'] = self.amb
 
@@ -96,11 +96,18 @@ class UCD:
                 self.amb.append(code)
         f.close()
 
+    def load_nerdfont(self):
+        self.nerdfont = []
+        with open('nerdfont/list.txt') as f:
+            for line in f:
+                if line.startswith('#'):
+                    continue
+                self.nerdfont.append(int(line, 16))
+
 def main():
     ucd = UCD(UCD_DIR)
     generate_list('test/amb.txt', ucd.amb, ucd)
-    nerdfont_list = load_nerdfont_list()
-    generate_list('test/nerdfont.txt', nerdfont_list, ucd)
+    generate_list('test/nerdfont.txt', ucd.nerdfont, ucd)
     config = configparser.ConfigParser()
     config.read('config.ini')
     for name in config:
@@ -125,15 +132,6 @@ def load_private_list():
     ret.extend(range(0xF0000, 0xFFFFD + 1))
     # <private-use-100000>..<private-use-10FFFD>
     ret.extend(range(0x100000, 0x10FFFD + 1))
-    return ret
-
-def load_nerdfont_list():
-    ret = []
-    with open('nerdfont/list.txt') as f:
-        for line in f:
-            if line.startswith('#'):
-                continue
-            ret.append(int(line, 16))
     return ret
 
 def filter_box_drawing(code_comment):
@@ -200,8 +198,7 @@ def generate_flavor(config, ucd):
             set_width(width_map, private_list, private)
         elif key.lower() == 'nerdfont':
             nerdfont = config.getint('nerdfont')
-            nerdfont_list = load_nerdfont_list()
-            set_width(width_map, nerdfont_list, nerdfont)
+            set_width(width_map, ucd.nerdfont, nerdfont)
         else:
             print(f'warning: unknown char block {key}', file=sys.stderr)
 
@@ -244,8 +241,6 @@ def load_emoji(fn):
             else:
                 emoji[int(code_or_range, 16)] = True
     return emoji
-
-
 
 def generate_list(path, code_list, ucd):
     print(f'Generating {path} ... ', end='')
