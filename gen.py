@@ -16,10 +16,10 @@ class UCD:
     def __init__(self, ucd_dir):
         self.ucd_dir = ucd_dir
         self.load_unicode_data()
-        self.load_amb()
-        self.load_nerdfont()
-        self.blocks = {}
-        #self.blocks['amb'] = self.amb
+        self.group = {}
+        self.group['amb'] = self.load_amb()
+        self.group['private'] = self.load_private()
+        self.group['nerdfont'] = self.load_nerdfont()
 
     def get_block(self, name):
         return self.blocks.get(name)
@@ -63,7 +63,7 @@ class UCD:
 
     def load_amb(self):
         path = f'{self.ucd_dir}/EastAsianWidth.txt'
-        self.amb = []
+        ret = []
         line_re = re.compile('([0-9A-Fa-f\.]+)\s*;\s*(\w+)\s+#\s+(.*)')
         f = open(path)
         for line in f:
@@ -91,23 +91,39 @@ class UCD:
 
             if '.' in code_or_range:
                 for i in range(int(first, 16), int(last, 16) + 1):
-                    self.amb.append(i)
+                    ret.append(i)
             else:
-                self.amb.append(code)
+                ret.append(code)
         f.close()
+        return ret
+
+    def load_private(self):
+        ret = []
+        # <private-use-E000>..<private-use-F8FF>
+        ret.extend(range(0xE000, 0xF8FF + 1))
+        # <private-use-FE00>..<private-use-F8FF>
+        ret.extend(range(0xFE00, 0xFE0F + 1))
+        # VARIATION SELECTOR-17..VARIATION SELECTOR-256
+        ret.extend(range(0xE0100, 0xE01EF + 1))
+        # <private-use-F0000>..<private-use-FFFFD>
+        ret.extend(range(0xF0000, 0xFFFFD + 1))
+        # <private-use-100000>..<private-use-10FFFD>
+        ret.extend(range(0x100000, 0x10FFFD + 1))
+        return ret
 
     def load_nerdfont(self):
-        self.nerdfont = []
+        ret = []
         with open('nerdfont/list.txt') as f:
             for line in f:
                 if line.startswith('#'):
                     continue
-                self.nerdfont.append(int(line, 16))
+                ret.append(int(line, 16))
+        return ret
 
 def main():
     ucd = UCD(UCD_DIR)
-    generate_list('test/amb.txt', ucd.amb, ucd)
-    generate_list('test/nerdfont.txt', ucd.nerdfont, ucd)
+    generate_list('test/amb.txt', ucd.group['amb'], ucd)
+    generate_list('test/nerdfont.txt', ucd.group['nerdfont'], ucd)
     config = configparser.ConfigParser()
     config.read('config.ini')
     for name in config:
@@ -119,20 +135,6 @@ def main():
 def generate_all():
     for section in config.sections():
         generate_flavor(config[section])
-
-def load_private_list():
-    ret = []
-    # <private-use-E000>..<private-use-F8FF>
-    ret.extend(range(0xE000, 0xF8FF + 1))
-    # <private-use-FE00>..<private-use-F8FF>
-    ret.extend(range(0xFE00, 0xFE0F + 1))
-    # VARIATION SELECTOR-17..VARIATION SELECTOR-256
-    ret.extend(range(0xE0100, 0xE01EF + 1))
-    # <private-use-F0000>..<private-use-FFFFD>
-    ret.extend(range(0xF0000, 0xFFFFD + 1))
-    # <private-use-100000>..<private-use-10FFFD>
-    ret.extend(range(0x100000, 0x10FFFD + 1))
-    return ret
 
 def filter_box_drawing(code_comment):
     code = code_comment[0]
@@ -158,11 +160,6 @@ def filter_geometric_shapes(code_comment):
         return False
     return True
 
-def set_width(width_map, width_list, width):
-    for code in width_list:
-        width_map[code] = width
-    return
-
 # 連続したコードポイントをレンジ形式にする
 def range_compress(width_map):
     ret = []
@@ -183,24 +180,23 @@ def range_compress(width_map):
     ret.append((start, end, end_width))
     return ret
 
+def set_width(width_map, ucd, name, config):
+    name = name.lower()
+    width = config.getint(name)
+    if name not in ucd.group:
+        print(f'warning: unknown group name {name}', file=sys.stderr)
+        return
+    for code in ucd.group[name]:
+        width_map[code] = width
+    return
+
 def generate_flavor(config, ucd):
     flavor = config.name
     print(f'# {flavor} Flavor')
     width_map = {}
 
-    for key in config:
-        if key.lower() == 'amb':
-            amb = config.getint('amb')
-            set_width(width_map, ucd.amb, amb)
-        elif key.lower() == 'private':
-            private_list = load_private_list()
-            private = config.getint('private')
-            set_width(width_map, private_list, private)
-        elif key.lower() == 'nerdfont':
-            nerdfont = config.getint('nerdfont')
-            set_width(width_map, ucd.nerdfont, nerdfont)
-        else:
-            print(f'warning: unknown char block {key}', file=sys.stderr)
+    for name in config:
+        set_width(width_map, ucd, name, config)
 
     width_list = range_compress(width_map)
     generate_locale(config, width_list)
