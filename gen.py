@@ -183,10 +183,16 @@ def range_compress(width_map):
 def set_width(width_map, ucd, name, config):
     name = name.lower()
     width = config.getint(name)
-    if name not in ucd.group:
+
+    if name.startswith('u+'):
+        name = name.removeprefix('u+')
+        code_list = [int(name, 16)]
+    elif name in ucd.group:
+        code_list = ucd.group[name]
+    else:
         print(f'warning: unknown group name {name}', file=sys.stderr)
         return
-    for code in ucd.group[name]:
+    for code in code_list:
         width_map[code] = width
     return
 
