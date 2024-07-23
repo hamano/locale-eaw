@@ -20,6 +20,7 @@ class UCD:
         self.group['amb'] = self.load_amb()
         self.group['private'] = self.load_private()
         self.group['nerdfont'] = self.load_nerdfont()
+        self.load_jis()
 
     def get_block(self, name):
         return self.blocks.get(name)
@@ -118,6 +119,24 @@ class UCD:
                 if line.startswith('#'):
                     continue
                 ret.append(int(line, 16))
+        return ret
+
+    def load_jis(self):
+        ret = []
+        with open(f'{self.ucd_dir}/JIS0208.TXT') as f:
+            for line in f:
+                if line.startswith('#'):
+                    continue
+
+                row = line.split('\t')
+                jis = int(row[1], 16)
+                uni = int(row[2], 16)
+
+                # 非漢字は8区 0x2070 まで
+                if jis > 0x2870:
+                    break
+                #print(f"{jis:x}, {uni:x} {chr(uni)}")
+                ret.append(uni)
         return ret
 
 def main():
