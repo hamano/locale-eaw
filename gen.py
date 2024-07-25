@@ -15,7 +15,8 @@ ORIGINAL_FILE = f'{UCD_DIR}/UTF-8'
 class UCD:
     def __init__(self, ucd_dir):
         self.ucd_dir = ucd_dir
-        self.load_unicode_data()
+        self.ucd, self.ucd_range = self.load_unicode_data()
+        self.eaw = self.load_eaw()
         self.group = {}
         self.group['amb'] = self.load_amb()
         self.group['private'] = self.load_private()
@@ -26,17 +27,17 @@ class UCD:
         return self.blocks.get(name)
 
     def get_name(self, code):
-        data = self.unicode_data.get(code)
+        data = self.ucd.get(code)
         if data:
             return data['name']
-        for data_range in self.unicode_data_range:
+        for data_range in self.ucd_range:
             if data_range['first'] <= code <= data_range['last']:
                 return data_range['name']
         return None
 
     def load_unicode_data(self):
-        self.unicode_data = {}
-        self.unicode_data_range = []
+        ucd = {}
+        ucd_range = []
         path = f'{self.ucd_dir}/UnicodeData.txt'
         with open(path, mode='r') as f:
             for line in f:
@@ -46,7 +47,7 @@ class UCD:
                     first = row
                     continue
                 if row[1].endswith(', Last>'):
-                    self.unicode_data_range.append({
+                    ucd_range.append({
                         'first': int(first[0], 16),
                         'last': int(row[0], 16),
                         'name': first[1].removeprefix('<').removesuffix(', First>'),
@@ -55,12 +56,43 @@ class UCD:
                         'comment': first[11],
                     })
                     continue
-                self.unicode_data[int(row[0], 16)] = {
+                ucd[int(row[0], 16)] = {
                     'name': row[1],
                     'category': row[2],
                     'combining': row[3],
                     'comment': row[11],
                 }
+        return ucd, ucd_range
+
+    # East Asian Widthマップを生成
+    def load_eaw(self):
+        path = f'{self.ucd_dir}/EastAsianWidth.txt'
+        ret = {}
+        line_re = re.compile('([0-9A-Fa-f\.]+)\s*;\s*(\w+)\s+#\s+(.*)')
+        f = open(path)
+        for line in f:
+            if line.strip() == '' or line.startswith('#'):
+                continue
+            match = line_re.match(line)
+            if not match:
+                print(f'unexpected format: {line}', file=sys.stderr)
+                continue
+            (code_or_range, eaw, comment) = match.groups()
+            if '.' in code_or_range:
+                # range code
+                (first, last) = tuple(code_or_range.split('..'))
+                code = int(first, 16)
+            else:
+                # single code
+                code = int(code_or_range, 16)
+
+            if '.' in code_or_range:
+                for i in range(int(first, 16), int(last, 16) + 1):
+                    ret[i] = eaw
+            else:
+                ret[code] = eaw
+        f.close()
+        return ret
 
     def load_amb(self):
         path = f'{self.ucd_dir}/EastAsianWidth.txt'
@@ -68,11 +100,11 @@ class UCD:
         line_re = re.compile('([0-9A-Fa-f\.]+)\s*;\s*(\w+)\s+#\s+(.*)')
         f = open(path)
         for line in f:
-            if line.startswith('#'):
+            if line.strip() == '' or line.startswith('#'):
                 continue
             match = line_re.match(line)
             if not match:
-                print(f'unexpected format: {line}', file=sys.stderr)
+                print(f'unexpected format: {len(line)}', file=sys.stderr)
                 continue
             (code_or_range, eaw, comment) = match.groups()
             if '.' in code_or_range:
@@ -135,6 +167,9 @@ class UCD:
                 # 非漢字は8区 0x2070 まで
                 if jis > 0x2870:
                     break
+                eaw = self.eaw.get(uni)
+                if eaw != 'A':
+                    continue
                 #print(f"{jis:x}, {uni:x} {chr(uni)}")
                 ret.append(uni)
         return ret
