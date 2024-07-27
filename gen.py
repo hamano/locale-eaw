@@ -95,39 +95,24 @@ class UCD:
         return ret
 
     def load_amb(self):
-        path = f'{self.ucd_dir}/EastAsianWidth.txt'
         ret = []
-        line_re = re.compile('([0-9A-Fa-f\.]+)\s*;\s*(\w+)\s+#\s+(.*)')
-        f = open(path)
-        for line in f:
-            if line.strip() == '' or line.startswith('#'):
-                continue
-            match = line_re.match(line)
-            if not match:
-                print(f'unexpected format: {len(line)}', file=sys.stderr)
-                continue
-            (code_or_range, eaw, comment) = match.groups()
-            if '.' in code_or_range:
-                # range code
-                (first, last) = tuple(code_or_range.split('..'))
-                code = int(first, 16)
-            else:
-                # single code
-                code = int(code_or_range, 16)
-
-            if eaw != 'A':
+        for c, w in self.eaw.items():
+            if w != 'A':
                 continue
 
-            # exclude COMBINING CHARACTER
-            if code == 0x0300:
+            # exclude Combining Diacritical Marks
+            if 0x0300 <= c <= 0x036F:
                 continue
 
-            if '.' in code_or_range:
-                for i in range(int(first, 16), int(last, 16) + 1):
-                    ret.append(i)
-            else:
-                ret.append(code)
-        f.close()
+            # exclude Variation Selectors
+            if 0xFE00 <= c <= 0xFE0F:
+                continue
+
+            # exclude Variation Selectors Supplement
+            if 0xE0100 <= c <= 0xE01EF:
+                continue
+
+            ret.append(c)
         return ret
 
     def load_private(self):
