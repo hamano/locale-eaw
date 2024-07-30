@@ -21,7 +21,6 @@ class UCD:
         self.group['amb'] = self.load_amb()
         self.group['private'] = self.load_private()
         self.group['nerdfont'] = self.load_nerdfont()
-        self.load_jis()
 
     def get_block(self, name):
         return self.blocks.get(name)
@@ -155,14 +154,14 @@ class UCD:
                 eaw = self.eaw.get(uni)
                 if eaw != 'A':
                     continue
-                #print(f"{jis:x}, {uni:x} {chr(uni)}")
                 ret.append(uni)
-        return ret
+        return sorted(ret)
 
 def main():
     ucd = UCD(UCD_DIR)
     generate_list('test/amb.txt', ucd.group['amb'], ucd)
     generate_list('test/nerdfont.txt', ucd.group['nerdfont'], ucd)
+    generate_list('test/jis.txt', ucd.jis, ucd)
     config = configparser.ConfigParser()
     config.read('config.ini')
     for name in config:
