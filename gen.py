@@ -21,6 +21,8 @@ class UCD:
         self.group['amb'] = self.load_amb()
         self.group['private'] = self.load_private()
         self.group['nerdfont'] = self.load_nerdfont()
+        self.jis = self.load_jis()
+        self.group['jpdoc'] = self.load_jpdoc()
 
     def get_block(self, name):
         return self.blocks.get(name)
@@ -157,11 +159,21 @@ class UCD:
                 ret.append(uni)
         return sorted(ret)
 
+    def load_jpdoc(self):
+        ret = []
+        for c in self.jis:
+            if 0x203B <= c <= 0x2312:
+                ret.append(c)
+            if 0x25A0 <= c <= 0x266F:
+                ret.append(c)
+        return ret
+
 def main():
     ucd = UCD(UCD_DIR)
     generate_list('test/amb.txt', ucd.group['amb'], ucd)
     generate_list('test/nerdfont.txt', ucd.group['nerdfont'], ucd)
     generate_list('test/jis.txt', ucd.jis, ucd)
+    generate_list('test/jpdoc.txt', ucd.group['jpdoc'], ucd)
     config = configparser.ConfigParser()
     config.read('config.ini')
     for name in config:
