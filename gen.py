@@ -118,16 +118,12 @@ class UCD:
 
     def load_private(self):
         ret = []
-        # <private-use-E000>..<private-use-F8FF>
+        # Private Use Area
         ret.extend(range(0xE000, 0xF8FF + 1))
-        # <private-use-FE00>..<private-use-F8FF>
-        ret.extend(range(0xFE00, 0xFE0F + 1))
-        # VARIATION SELECTOR-17..VARIATION SELECTOR-256
-        ret.extend(range(0xE0100, 0xE01EF + 1))
-        # <private-use-F0000>..<private-use-FFFFD>
-        ret.extend(range(0xF0000, 0xFFFFD + 1))
-        # <private-use-100000>..<private-use-10FFFD>
-        ret.extend(range(0x100000, 0x10FFFD + 1))
+        # Supplementary Private Use Area-A
+        ret.extend(range(0xF0000, 0xFFFFF + 1))
+        # Supplementary Private Use Area-B
+        ret.extend(range(0x100000, 0x10FFFF + 1))
         return ret
 
     def load_nerdfont(self):
