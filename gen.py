@@ -23,6 +23,9 @@ class UCD:
         self.group['nerdfont'] = self.load_nerdfont()
         self.jis = self.load_jis()
         self.group['jpdoc'] = self.load_jpdoc()
+        self.group['reference_mark'] = [0x203B]
+        self.group['circled_digit'] = range(0x2460, 0x2473 + 1)
+        self.group['parenthesized_digit'] = range(0x2474, 0x2487 + 1)
 
     def get_block(self, name):
         return self.blocks.get(name)
