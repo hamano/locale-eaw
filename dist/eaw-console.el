@@ -81,55 +81,81 @@
   #x207f
   (#x2081.#x2084)
   #x20ac
+  #x2103
   #x2105
   #x2109
   #x2113
   #x2116
   (#x2121.#x2122)
   #x2126
+  #x212b
   (#x2153.#x2154)
   (#x215b.#x215e)
   (#x2160.#x216b)
   (#x2170.#x2179)
   #x2189
-  (#x2194.#x2199)
+  (#x2190.#x2199)
   (#x21b8.#x21b9)
+  #x21d2
+  #x21d4
   #x21e7
+  #x2200
+  (#x2202.#x2203)
+  (#x2207.#x2208)
+  #x220b
   #x220f
   #x2211
   #x2215
-  #x221f
+  #x221a
+  (#x221d.#x2220)
   #x2223
   #x2225
+  (#x2227.#x222c)
   #x222e
-  (#x2236.#x2237)
-  #x223c
+  (#x2234.#x2237)
+  (#x223c.#x223d)
   #x2248
   #x224c
-  (#x2264.#x2265)
+  #x2252
+  (#x2260.#x2261)
+  (#x2264.#x2267)
+  (#x226a.#x226b)
   (#x226e.#x226f)
+  (#x2282.#x2283)
+  (#x2286.#x2287)
   #x2295
   #x2299
+  #x22a5
   #x22bf
-  (#x2460.#x24e9)
+  #x2312
+  (#x24b6.#x24e9)
   (#x24eb.#x254b)
   (#x2550.#x2573)
   (#x2580.#x258f)
   (#x2592.#x2595)
+  (#x25a0.#x25a1)
   (#x25a3.#x25a9)
+  (#x25b2.#x25b3)
   (#x25b6.#x25b7)
+  (#x25bc.#x25bd)
   (#x25c0.#x25c1)
-  #x25c8
-  (#x25d0.#x25d1)
+  (#x25c6.#x25c8)
+  #x25cb
+  (#x25ce.#x25d1)
   (#x25e2.#x25e5)
+  #x25ef
+  (#x2605.#x2606)
   #x2609
   (#x260e.#x260f)
   #x261c
   #x261e
+  #x2640
+  #x2642
   (#x2660.#x2661)
-  (#x2663.#x2664)
-  (#x2667.#x2669)
-  #x266c
+  (#x2663.#x2665)
+  (#x2667.#x266a)
+  (#x266c.#x266d)
+  #x266f
   (#x269e.#x269f)
   #x26bf
   (#x26c6.#x26cd)
@@ -144,193 +170,22 @@
   (#x26fe.#x26ff)
   #x273d
   (#x2776.#x277f)
-  (#x2b56.#x2b57)
-  #x2b59
+  (#x2b56.#x2b59)
   (#x3248.#x324f)
-  (#xe00b.#xe09f)
-  (#xe0a4.#xe0af)
-  #xe0c9
-  #xe0cb
-  #xe0d3
-  (#xe0d5.#xe1ff)
-  (#xe2aa.#xe2ff)
-  (#xe3e4.#xe5f9)
-  (#xe6b3.#xe6ff)
-  (#xe7c6.#xea5f)
-  #xea89
-  (#xea8d.#xea8e)
-  #xeac8
-  (#xeaca.#xeacb)
-  #xeb0a
-  #xeb4f
-  (#xebec.#xefff)
-  #xf00f
-  (#xf01f.#xf020)
-  #xf03f
-  #xf04f
-  #xf05f
-  #xf06f
-  #xf07f
-  #xf08f
-  #xf09f
-  #xf0af
-  (#xf0b3.#xf0bf)
-  #xf0cf
-  #xf0df
-  #xf0ef
-  #xf0ff
-  #xf10f
-  #xf11f
-  #xf12f
-  #xf13f
-  #xf14f
-  #xf15f
-  #xf16f
-  #xf17f
-  #xf18f
-  #xf19f
-  #xf1af
-  #xf1bf
-  #xf1cf
-  #xf1df
-  #xf1ef
-  #xf1ff
-  #xf20f
-  (#xf21f.#xf220)
-  #xf23f
-  #xf24f
-  #xf25f
-  #xf26f
-  #xf27f
-  #xf28f
-  #xf29f
-  #xf2af
-  #xf2bf
-  #xf2cf
-  #xf2df
-  (#xf2e1.#xf2ff)
-  (#xf373.#xf3ff)
-  (#xf534.#xf8ff)
   #xfffd
   (#x1f100.#x1f10a)
-  (#x1f110.#x1f12d)
+  (#x1f12a.#x1f12d)
   (#x1f130.#x1f169)
   (#x1f170.#x1f18d)
   (#x1f18f.#x1f190)
   (#x1f19b.#x1f1ac)
-  #xf0000
-  (#xf1af1.#xffffd)
-  (#x100000.#x10fffd)
 ))
 (setq code-wide '(
   #x203b
-  #x2103
-  #x212b
-  (#x2190.#x2193)
-  #x21d2
-  #x21d4
-  #x2200
-  (#x2202.#x2203)
-  (#x2207.#x2208)
-  #x220b
-  #x221a
-  (#x221d.#x221e)
-  #x2220
-  (#x2227.#x222c)
-  (#x2234.#x2235)
-  #x223d
-  #x2252
-  (#x2260.#x2261)
-  (#x2266.#x2267)
-  (#x226a.#x226b)
-  (#x2282.#x2283)
-  (#x2286.#x2287)
-  #x22a5
-  #x2312
-  (#x23fb.#x23fe)
-  (#x25a0.#x25a1)
-  (#x25b2.#x25b3)
-  (#x25bc.#x25bd)
-  (#x25c6.#x25c7)
-  #x25cb
-  (#x25ce.#x25cf)
-  #x25ef
-  (#x2605.#x2606)
-  #x2630
-  #x2640
-  #x2642
-  #x2665
-  #x266a
-  #x266d
-  #x266f
-  #x26a1
-  (#x276c.#x2771)
-  #x2b58
-  (#xe000.#xe00a)
-  (#xe0a0.#xe0a3)
-  (#xe0b0.#xe0c8)
-  #xe0ca
-  (#xe0cc.#xe0d2)
-  #xe0d4
-  (#xe200.#xe2a9)
-  (#xe300.#xe3e3)
-  (#xe5fa.#xe6b2)
-  (#xe700.#xe7c5)
-  (#xea60.#xea88)
-  (#xea8a.#xea8c)
-  (#xea8f.#xeac7)
-  #xeac9
-  (#xeacc.#xeb09)
-  (#xeb0b.#xeb4e)
-  (#xeb50.#xebeb)
-  (#xf000.#xf00e)
-  (#xf010.#xf01e)
-  (#xf021.#xf03e)
-  (#xf040.#xf04e)
-  (#xf050.#xf05e)
-  (#xf060.#xf06e)
-  (#xf070.#xf07e)
-  (#xf080.#xf08e)
-  (#xf090.#xf09e)
-  (#xf0a0.#xf0ae)
-  (#xf0b0.#xf0b2)
-  (#xf0c0.#xf0ce)
-  (#xf0d0.#xf0de)
-  (#xf0e0.#xf0ee)
-  (#xf0f0.#xf0fe)
-  (#xf100.#xf10e)
-  (#xf110.#xf11e)
-  (#xf120.#xf12e)
-  (#xf130.#xf13e)
-  (#xf140.#xf14e)
-  (#xf150.#xf15e)
-  (#xf160.#xf16e)
-  (#xf170.#xf17e)
-  (#xf180.#xf18e)
-  (#xf190.#xf19e)
-  (#xf1a0.#xf1ae)
-  (#xf1b0.#xf1be)
-  (#xf1c0.#xf1ce)
-  (#xf1d0.#xf1de)
-  (#xf1e0.#xf1ee)
-  (#xf1f0.#xf1fe)
-  (#xf200.#xf20e)
-  (#xf210.#xf21e)
-  (#xf221.#xf23e)
-  (#xf240.#xf24e)
-  (#xf250.#xf25e)
-  (#xf260.#xf26e)
-  (#xf270.#xf27e)
-  (#xf280.#xf28e)
-  (#xf290.#xf29e)
-  (#xf2a0.#xf2ae)
-  (#xf2b0.#xf2be)
-  (#xf2c0.#xf2ce)
-  (#xf2d0.#xf2de)
-  #xf2e0
-  (#xf300.#xf372)
-  (#xf400.#xf533)
-  (#xf0001.#xf1af0)
+  (#x2460.#x24b5)
+  (#xe000.#xf8ff)
+  (#x1f110.#x1f129)
+  (#xf0000.#x10ffff)
 ))
 
 (defun eaw-init ()
