@@ -129,7 +129,7 @@ class UCD:
         # Supplementary Private Use Area-A
         ret.extend(range(0xF0000, 0xFFFFF + 1))
         # Supplementary Private Use Area-B
-        ret.extend(range(0x100000, 0x10FFFF + 1))
+        ret.extend(range(0x100000, 0x10FFFD + 1))
         return ret
 
     def load_nerdfont(self):

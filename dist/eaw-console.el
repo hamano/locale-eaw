@@ -184,7 +184,7 @@
   (#x2460.#x24e9)
   (#xe000.#xf8ff)
   (#x1f110.#x1f129)
-  (#xf0000.#x10ffff)
+  (#xf0000.#x10fffd)
 ))
 
 (defun eaw-init ()
