@@ -28,6 +28,7 @@ class UCD:
         self.group['parenthesized_digit'] = range(0x2474, 0x2487 + 1)
         self.group['digit_full_stop'] = range(0x2488, 0x249B + 1)
         self.group['parenthesized_latin'] = list(range(0x249C, 0x24B5 + 1)) + list(range(0x1F110, 0x1F129 + 1))
+        self.group['circled_latin'] = range(0x24B6, 0x24E9 + 1)
 
     def get_block(self, name):
         return self.blocks.get(name)
