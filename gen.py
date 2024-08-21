@@ -24,7 +24,7 @@ class UCD:
         self.jis = self.load_jis()
         self.group['jpdoc'] = self.load_jpdoc()
         self.group['reference_mark'] = [0x203B]
-        self.group['circled_digit'] = range(0x2460, 0x2473 + 1)
+        self.group['circled_digit'] = list(range(0x2460, 0x2473 + 1)) + [0x24EA]
         self.group['parenthesized_digit'] = range(0x2474, 0x2487 + 1)
         self.group['digit_full_stop'] = range(0x2488, 0x249B + 1)
         self.group['parenthesized_latin'] = list(range(0x249C, 0x24B5 + 1)) + list(range(0x1F110, 0x1F129 + 1))

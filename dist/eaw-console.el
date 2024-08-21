@@ -181,7 +181,7 @@
 ))
 (setq code-wide '(
   #x203b
-  (#x2460.#x24e9)
+  (#x2460.#x24ea)
   (#xe000.#xf8ff)
   (#x1f110.#x1f129)
   (#xf0000.#x10fffd)
