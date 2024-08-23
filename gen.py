@@ -24,11 +24,13 @@ class UCD:
         self.jis = self.load_jis()
         self.group['jpdoc'] = self.load_jpdoc()
         self.group['reference_mark'] = [0x203B]
+        # 0x24EA と 0x1F10C は neutral
         self.group['circled_digit'] = \
             list(range(0x2460, 0x2473 + 1)) + [0x24EA] + \
             list(range(0x2776, 0x277F + 1)) + list(range(0x24EB, 0x24F4 + 1)) + [0x24FF] + \
             list(range(0x278A, 0x2793 + 1)) + [0x1F10C] + \
-            list(range(0x24F5, 0x24FE + 1))
+            list(range(0x24F5, 0x24FE + 1)) + \
+            list(range(0x3248, 0x324F + 1))
         self.group['parenthesized_digit'] = range(0x2474, 0x2487 + 1)
         self.group['digit_full_stop'] = range(0x2488, 0x249B + 1)
         self.group['parenthesized_latin'] = list(range(0x249C, 0x24B5 + 1)) + list(range(0x1F110, 0x1F129 + 1))
