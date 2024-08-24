@@ -36,6 +36,8 @@ class UCD:
         self.group['parenthesized_latin'] = list(range(0x249C, 0x24B5 + 1)) + list(range(0x1F110, 0x1F129 + 1))
         self.group['circled_latin'] = range(0x24B6, 0x24E9 + 1)
 
+        self.group['box_drawing'] = range(0x2500, 0x257F + 1)
+
     def get_block(self, name):
         return self.blocks.get(name)
 
@@ -193,14 +195,6 @@ def main():
 def generate_all():
     for section in config.sections():
         generate_flavor(config[section])
-
-def filter_box_drawing(code_comment):
-    code = code_comment[0]
-    comment = code_comment[1]
-    # BOX DRAWINGS
-    if 0x2500 <= code <= 0x257F:
-        return False
-    return True
 
 def filter_block_elements(code_comment):
     code = code_comment[0]
