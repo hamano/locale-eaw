@@ -37,6 +37,7 @@ class UCD:
         self.group['circled_latin'] = range(0x24B6, 0x24E9 + 1)
 
         self.group['box_drawing'] = range(0x2500, 0x257F + 1)
+        self.group['block_elements'] = range(0x2580, 0x259F + 1)
 
     def get_block(self, name):
         return self.blocks.get(name)
@@ -196,14 +197,6 @@ def generate_all():
     for section in config.sections():
         generate_flavor(config[section])
 
-def filter_block_elements(code_comment):
-    code = code_comment[0]
-    comment = code_comment[1]
-    # BLOCK ELEMENTS
-    if 0x2580 <= code <= 0x259F:
-        return False
-    return True
-
 def filter_geometric_shapes(code_comment):
     code = code_comment[0]
     comment = code_comment[1]
@@ -261,10 +254,6 @@ def generate_flavor(config, ucd):
     generate_elisp(config, width_list)
     generate_vimrc(config, width_list)
     return
-
-    box_drawing = config.getint('box_drawing', amb)
-    if box_drawing == 1:
-        wide_list = list(filter(filter_box_drawing, wide_list))
 
     block_elements = config.getint('block_elements', amb)
     if block_elements == 1:
