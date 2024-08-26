@@ -38,6 +38,7 @@ class UCD:
 
         self.group['box_drawing'] = range(0x2500, 0x257F + 1)
         self.group['block_elements'] = range(0x2580, 0x259F + 1)
+        self.group['geometric_shapes'] = range(0x25A0, 0x25FF + 1)
 
     def get_block(self, name):
         return self.blocks.get(name)
@@ -197,14 +198,6 @@ def generate_all():
     for section in config.sections():
         generate_flavor(config[section])
 
-def filter_geometric_shapes(code_comment):
-    code = code_comment[0]
-    comment = code_comment[1]
-    # GEOMETRIC SHAPES
-    if 0x25A0 <= code <= 0x25FF:
-        return False
-    return True
-
 # 連続したコードポイントをレンジ形式にする
 def range_compress(width_map):
     ret = []
@@ -253,16 +246,6 @@ def generate_flavor(config, ucd):
     generate_locale(config, width_list)
     generate_elisp(config, width_list)
     generate_vimrc(config, width_list)
-    return
-
-    block_elements = config.getint('block_elements', amb)
-    if block_elements == 1:
-        wide_list = list(filter(filter_block_elements, wide_list))
-
-    geometric_shapes = config.getint('geometric_shapes', amb)
-    if geometric_shapes == 1:
-        wide_list = list(filter(filter_geometric_shapes, wide_list))
-
 
 def load_emoji(fn):
     emoji = {}
