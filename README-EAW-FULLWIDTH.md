@@ -2,8 +2,6 @@
 
 ## libcのロケールの曖昧な文字幅を全角にする
 
-[こちら](http://vdr.jp/d/20070322.html)で配布されている UTF-8-EAW-FULLWIDTH.gz がちょっと古くなっていたので同じ方法で生成してメンテ出来るようにしました。
-
 1. [UTF-8-EAW-FULLWIDTH.gz](https://raw.githubusercontent.com/hamano/locale-eaw/master/dist/UTF-8-EAW-FULLWIDTH.gz) を /usr/share/i18n/charmaps/ に配置
 
 2. /etc/locale.gen を以下のように変更
@@ -12,46 +10,42 @@
 ja_JP.UTF-8 UTF-8-EAW-FULLWIDTH
 ~~~
 
-3. locale-gen を実行
+3. `sudo locale-gen` を実行
 
 ## rxvt-unicodeで曖昧な文字幅を全角にする
 
 libcのロケールを修正する事で、曖昧な文字幅を統一できます。
+
+## xtermで曖昧な文字幅を全角にする
+
+.Xresources に以下を設定
+~~~
+xterm*cjkWidth: true
+~~~
 
 ## emacsで曖昧な文字幅を全角にする
 
 emacs21 と emacs22 と emacs23以降で対応方法が異なります。
 様々なemacsのバージョンで動作するelispを用意していますのでこれを使ってください。
 
-1. [eaw.el](https://raw.githubusercontent.com/hamano/locale-eaw/master/eaw.el) を ~/.emacs.d/site-lisp/ に配置
+1. [eaw-fullwidth.el](https://raw.githubusercontent.com/hamano/locale-eaw/dist/eaw-fullwidth.el) を ~/.emacs.d/site-lisp/ に配置
 
-2. .emacs に以下を設定する
+2. .emacs に以下を設定
 
 ~~~
 (add-to-list 'load-path "~/.emacs.d/site-lisp")
-(require 'eaw)
-(eaw-fullwidth)
+(require 'eaw-fullwidth)
 ~~~
 
 ## vimで曖昧な文字幅を全角にする
 
-.vimrc に、
+.vimrc に以下を設定
+
 ~~~
 if exists('&ambw')
     set ambw=double
 endif
 ~~~
-と設定する。
-
-## xtermで曖昧な文字幅を全角にする
-
-.Xresources などに、
-~~~
-xterm*utf8: 1
-xterm*locale: true
-xterm*cjkWidth: true
-~~~
-と設定する。
 
 ## mltermで曖昧な文字幅を全角にする
 
