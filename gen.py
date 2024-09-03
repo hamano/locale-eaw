@@ -35,6 +35,7 @@ class UCD:
             list(range(0x3248, 0x324F + 1))
         self.group['parenthesized_digit'] = range(0x2474, 0x2487 + 1)
         self.group['digit_full_stop'] = list(range(0x2488, 0x249B + 1)) + [0x1F100]
+        self.group['digit_comma'] = list(range(0x1F101, 0x1F10A + 1))
         self.group['parenthesized_latin'] = list(range(0x249C, 0x24B5 + 1)) + list(range(0x1F110, 0x1F129 + 1))
         self.group['circled_latin'] = list(range(0x24B6, 0x24E9 + 1)) + list(range(0x1F150, 0x1F169 + 1))
         self.group['squared_latin'] = list(range(0x1F130, 0x1F140 + 1)) + \
