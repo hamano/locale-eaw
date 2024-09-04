@@ -38,13 +38,15 @@ class UCD:
         self.group['digit_comma'] = list(range(0x1F101, 0x1F10A + 1))
         self.group['parenthesized_latin'] = list(range(0x249C, 0x24B5 + 1)) + list(range(0x1F110, 0x1F129 + 1))
         self.group['circled_latin'] = list(range(0x24B6, 0x24E9 + 1)) + list(range(0x1F150, 0x1F169 + 1))
-        self.group['squared_latin'] = list(range(0x1F130, 0x1F140 + 1)) + \
-            list(range(0x1F170, 0x1F189 + 1)) + \
+        self.group['squared_latin'] = list(range(0x1F130, 0x1F14F + 1)) + \
+            list(range(0x1F170, 0x1F1AC + 1)) + \
             list(range(0x1F1E6, 0x1F1FF + 1))
         self.group['box_drawing'] = range(0x2500, 0x257F + 1)
         self.group['block_elements'] = range(0x2580, 0x259F + 1)
         self.group['geometric_shapes'] = range(0x25A0, 0x25FF + 1)
         self.group['miscellaneous_symbols'] = range(0x2600, 0x26FF + 1)
+        #self.group['progress_bar'] = range(0xEE00, 0xEE0B + 1)
+        self.group['progress_bar'] = range(0xEE00, 0xEE05 + 1)
 
     def get_block(self, name):
         return self.blocks.get(name)
