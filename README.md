@@ -10,15 +10,17 @@ East Asian Ambiguous Width 問題とは、これらの文字をコンソール�
 
 例えばテキストエディタのカーソルの表示位置と内部状態が食い違ってしまうため、表示が壊れてしまいます。
 
+また、NerdFontが利用するプライベート領域に関しても曖昧となっているため、ターミナルでNerdFontを利用する際にも問題となります。
+
 ## 解決方法その1: 曖昧な文字を全角で統一する EAW-FULLWIDTH
 
 この問題のてっとり早い解決方法は曖昧な文字の文字幅を全角で統一する事です。
 
 対応方法はアプリケーションによって様々ですが、xterm, mlterm, vimなどを使っている人は設定やオプションを指定するだけで文字幅を変更することができます。
 
-また、libc localeを修正することでrxvt-unicodeのようなアプリの文字幅を変更できます。
+rxvt-unicodeのようなアプリはlibc localeを修正することで文字幅を変更できます。
 
-詳細は[README-EAW-FULLWIDTH.md](README-EAW-FULLWIDTH.md)を参照してください。
+各アプリケーションの設定方法は[README-EAW-FULLWIDTH.md](README-EAW-FULLWIDTH.md)を参照してください。
 
 ## 解決方法その2: 文字毎に最適な文字幅を設定する EAW-CONSOLE
 
@@ -31,6 +33,7 @@ East Asian Ambiguous Width 問題とは、これらの文字をコンソール�
 - 半角表示で十分なギリシャ文字、キリル文字が全角となってしまう。
 - ①が全角なのに⓪が半角になる
 - ローマ数字のⅰ〜ⅹが全角なのにⅺとⅻが半角となる
+- 全角表示が自然な絵文字がNallowとして定義されているので半角となる
 
 より良い解決方法は各文字毎に好みの文字幅を定義し、利用しているアプリケーションで文字幅を統一することです。
 これが可能なアプリケーションは、
@@ -46,6 +49,8 @@ East Asian Ambiguous Width 問題とは、これらの文字をコンソール�
 各文字毎に文字幅を設定するのは大変ですが、このレポジトリではこれを実現するために役立つツールとおすすめのロケール`UTF-8-EAW-CONSOLE`を提供します。
 
 このロケールは曖昧な文字を半角にしつつ絵文字は全角にしたい、というような人におすすめです。
+
+各アプリケーションの設定方法は[README-EAW-CONSOLE.md](README-EAW-CONSOLE.md)を参照してください。
 
 ## さらにカスタマイズ
 
@@ -96,9 +101,11 @@ eaw = 1
 
 ## ㉈
 - [㉈] U+3248 CIRCLED NUMBER TEN ON BLACK SQUARE: A (ambiguous)
-この文字はambiguousなのにデフォルトのglibcロケールで全角となっている。ゆえに壊れやすい。
+この文字はambiguousなのにglibcのUTF-8ロケールで全角となっている。ゆえに壊れやすい。
 
 https://sourceware.org/bugzilla/show_bug.cgi?id=24658
 
 # 参考文献
+- [UAX#11: East Asian Width](https://www.unicode.org/reports/tr11/)
+- [UTS#51: UNICODE EMOJI](https://www.unicode.org/reports/tr51/)
 - https://gitlab.freedesktop.org/terminal-wg/specifications/-/issues/9

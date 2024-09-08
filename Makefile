@@ -1,10 +1,11 @@
+.PHONY: dist
 all: dist
 
 ucd/UTF-8:
 	make -C ucd
 
 dist: ucd/UTF-8 ucd/EastAsianWidth.txt
-	mkdir dist
+	mkdir -p dist
 	./gen.py
 
 install:
