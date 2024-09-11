@@ -1,5 +1,5 @@
-UNICODE_VER=15.1.0
-URI=http://www.unicode.org/Public/$(UNICODE_VER)/ucd
+UNICODE_VER=16.0.0
+URI=https://www.unicode.org/Public/$(UNICODE_VER)/ucd
 
 all: UTF-8
 
@@ -22,4 +22,4 @@ UTF-8: UnicodeData.txt EastAsianWidth.txt DerivedCoreProperties.txt HangulSyllab
 		--unicode_version $(UNICODE_VER)
 
 clean:
-	rm -rf UTF-8 UnicodeData.txt EastAsianWidth.txt PropList.txt emoji/emoji-data.txt
+	rm -rf UTF-8 *.txt emoji/emoji-data.txt
