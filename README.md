@@ -1,22 +1,22 @@
-# East Asian Ambiguous Width問題を解決するための修正ロケール
+# East Asian Ambiguous Width問題のための修正ロケール
 
 ## East Asian Ambiguous Width問題とは
 
-East Asian Ambiguous文字とは、Unicodeで文字幅が曖昧(文脈により異なる文字幅で表示する)と定義されている文字のことで、例えば、○(U+25CB)や×(U+00D7)や△(U+25B3)※(U+203B)などの文字です。
+East Asian Ambiguous文字とは、Unicodeで文字幅が曖昧(文脈により異なる文字幅で表示する)と定義されている文字のことで、例えば、※(U+203B)や○(U+25CB)や×(U+00D7)や△(U+25B3)などの文字です。
 
 East Asian Ambiguous 文字の一覧は[こちら](https://raw.githubusercontent.com/hamano/locale-eaw/master/test/amb.txt)。
 
-East Asian Ambiguous Width 問題とは、これらの文字をコンソールで表示する際libcの`wcwidth(3)`、シェル、ターミナルエミュレータ、テキストエディタなどのTUIアプリがそれぞれ異なる文字幅で認識する問題です。
+East Asian Ambiguous Width 問題とは、これらの文字をコンソールで表示する際libcの`wcwidth(3)`、シェル、ターミナルエミュレータ、テキストエディタなどのプログラムがそれぞれ異なる文字幅で認識する問題です。
 
 例えばテキストエディタのカーソルの表示位置と内部状態が食い違ってしまうため、表示が壊れてしまいます。
 
-また、NerdFontが利用するプライベート領域に関しても曖昧となっているため、ターミナルでNerdFontを利用する際にも問題となります。
+また、絵文字やNerdFontの文字も曖昧となっているため、ターミナルで絵文字を利用する際にも問題となります。
 
 ## 解決方法その1: 曖昧な文字を全角で統一する EAW-FULLWIDTH
 
 この問題のてっとり早い解決方法は曖昧な文字の文字幅を全角で統一する事です。
 
-対応方法はアプリケーションによって様々ですが、xterm, mlterm, vimなどを使っている人は設定やオプションを指定するだけで文字幅を変更することができます。
+対応方法はアプリケーションによって様々ですが、xterm, mlterm, vimなどを使っている人は設定やオプションを指定するだけで文字幅を変更できます。
 
 rxvt-unicodeのようなアプリはlibc localeを修正することで文字幅を変更できます。
 
@@ -24,12 +24,13 @@ rxvt-unicodeのようなアプリはlibc localeを修正することで文字幅
 
 ## 解決方法その2: 文字毎に最適な文字幅を設定する EAW-CONSOLE
 
-曖昧な文字を全角に統一しても以下のような問題があります。
+曖昧な文字を全角に統一すると以下のような問題が起こります。
 
 - 罫線が全角となってしまう。
   - ncursesやtmuxなどのTUI表示が壊れる
 - ブロック要素が全角となってしまう。
   - プログレスバー表示などが壊れる
+- latin1のSOFT HYPHENなども全角となってしまう
 - 半角表示で十分なギリシャ文字、キリル文字が全角となってしまう。
 - ①が全角なのに⓪が半角になる
 - ローマ数字のⅰ〜ⅹが全角なのにⅺとⅻが半角となる
@@ -52,7 +53,7 @@ rxvt-unicodeのようなアプリはlibc localeを修正することで文字幅
 
 各アプリケーションの設定方法は[README-EAW-CONSOLE.md](README-EAW-CONSOLE.md)を参照してください。
 
-## さらにカスタマイズ
+## もっとカスタマイズ
 
 `UTF-8-EAW-FULLWIDTH`や`UTF-8-EAW-CONSOLE`などのロケールのフレーバーは[config.ini](config.ini)に定義しておりこれらが気に入らない場合、以下のように追記して`./gen.py`を実行します。
 
