@@ -11,9 +11,11 @@ East Asian Ambiguous文字を一律に全角とすると、様々な問題が起
 
 ※、♨、①、ローマ数字、絵文字、nerdfont文字などを全角として扱います。
 
+詳細は[文字幅の裁定](#文字幅の裁定)を参照
+
 ## libcのロケールの設定
 
-1. [UTF-8-EAW-CONSOLE.gz](https://raw.githubusercontent.com/hamano/locale-eaw/master/dist/UTF-8-EAW-FULLWIDTH.gz) を /usr/share/i18n/charmaps/ に配置
+1. [UTF-8-EAW-CONSOLE.gz](https://raw.githubusercontent.com/hamano/locale-eaw/master/dist/UTF-8-EAW-CONSOLE.gz) を /usr/share/i18n/charmaps/ に配置
 
 2. /etc/locale.gen を以下のように変更
 ~~~
@@ -86,7 +88,7 @@ source ~/.config/nvim/eaw-console.vim
 unicode_full_width_areas = ...
 ~~~
 
-# 裁定
+# 文字幅の裁定
 
 ## ※
 - 和文では全角として扱われてきた歴史がある
@@ -150,6 +152,12 @@ TUIが壊れるため半角とする
 - 欧文では半角で扱われている
 
 ひとまず半角とする
+
+## 矢印(U+2190..U+21FF)
+- ←↑→↓だけであれば半角でも描画可能
+- しかし⇴⇼↹などを半角で描画するのは視認性が悪い
+
+ひとまず全角とし、問題があれば再検討
 
 ## 麻雀牌
 - 🀀はAmbiguousだが🀄はWide
