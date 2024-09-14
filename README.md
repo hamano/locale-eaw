@@ -34,9 +34,9 @@ rxvt-unicodeのようなアプリはlibc localeを修正することで文字幅
 - 半角表示で十分なギリシャ文字、キリル文字が全角となってしまう。
 - ①が全角なのに⓪が半角になる
 - ローマ数字のⅰ〜ⅹが全角なのにⅺとⅻが半角となる
-- 全角表示が自然な絵文字がNallowとして定義されているので半角となる
+- 全角表示が自然な絵文字がNeutralとして定義されていて半角になる
 
-より良い解決方法は各文字毎に好みの文字幅を定義し、利用しているアプリケーションで文字幅を統一することです。
+より良い解決方法は各文字毎に適切な文字幅を定義し、利用しているアプリケーションで文字幅を統一することです。
 これが可能なアプリケーションは、
 - libcの`wcwidth(3)`を利用するアプリケーション
   - xterm
@@ -48,8 +48,6 @@ rxvt-unicodeのようなアプリはlibc localeを修正することで文字幅
 
 などがあります。
 各文字毎に文字幅を設定するのは大変ですが、このレポジトリではこれを実現するために役立つツールとおすすめのロケール`UTF-8-EAW-CONSOLE`を提供します。
-
-このロケールは曖昧な文字を半角にしつつ絵文字は全角にしたい、というような人におすすめです。
 
 各アプリケーションの設定方法は[README-EAW-CONSOLE.md](README-EAW-CONSOLE.md)を参照してください。
 
@@ -84,18 +82,28 @@ eaw = 1
 - [ⅺ] U+217A SMALL ROMAN NUMERAL ELEVEN: N (neutral)
 - [ⅻ] U+217B SMALL ROMAN NUMERAL TWELVE: N (neutral)
 
-## Neutralだが半角描画が厳しい文字たち
+## Neutralで半角描画が厳しい文字たち
 - [‱] U+2031 PER TEN THOUSAND SIGN: N (neutral)
 - [℻] U+213B FACSIMILE SIGN
 - [⅏] U+214F SYMBOL FOR SAMARITAN SOURCE
 
-## ⑳と㉑
+## ⓪と⑳と㉑
+- [⓪] U+24EA CIRCLED DIGIT ZERO: N (neutral)
 - [⑳] U+2473 CIRCLED NUMBER TWENTY: A (ambiguous)
 - [㉑] U+3251 CIRCLED NUMBER TWENTY ONE: W (wide)
 
 ## ㉈
 - [㉈] U+3248 CIRCLED NUMBER TEN ON BLACK SQUARE: A (ambiguous)
 この文字はambiguousなのにglibcのUTF-8ロケールで全角となっている。ゆえに壊れやすい。
+
+
+## 麻雀牌
+- [🀀] MAHJONG TILE EAST WIND: N (neutral)
+- [🀄] MAHJONG TILE RED DRAGON: W (wide)
+
+## トランプのジョーカーだけWide
+- [🃏] PLAYING CARD BLACK JOKER: W (wide)
+- [🂡] PLAYING CARD ACE OF SPADES: N (neutral)
 
 https://sourceware.org/bugzilla/show_bug.cgi?id=24658
 
