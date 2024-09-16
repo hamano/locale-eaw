@@ -175,6 +175,7 @@
   (#x2776.#x277f)
   (#x2b56.#x2b59)
   (#x3248.#x324f)
+  (#xe000.#xf8ff)
   #xfffd
   (#x1f100.#x1f10a)
   (#x1f110.#x1f12d)
@@ -182,6 +183,7 @@
   (#x1f170.#x1f18d)
   (#x1f18f.#x1f190)
   (#x1f19b.#x1f1ac)
+  (#xf0000.#x10fffd)
 ))
 
 (defun eaw-init ()
