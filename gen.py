@@ -17,8 +17,10 @@ class UCD:
         self.ucd, self.ucd_range = self.load_unicode_data()
         self.eaw = self.load_eaw()
         self.group = {}
-        self.group['amb'] = self.load_amb()
         self.group['private'] = self.load_private()
+        # Private領域を除外したamb list
+        self.group['amb_ex_priv'] = self.load_amb()
+        self.group['amb'] = self.group['amb_ex_priv'] + self.group['private']
         self.group['nerdfont'] = self.load_nerdfont()
         self.jis = self.load_jis()
         self.group['jpdoc'] = self.load_jpdoc()
@@ -117,24 +119,30 @@ class UCD:
         f.close()
         return ret
 
+    # EAW=Aのリスト、だがamb.txtを生成する都合上プライベート領域を除外している
     def load_amb(self):
         ret = []
         for c, w in self.eaw.items():
             if w != 'A':
                 continue
-
             # exclude Combining Diacritical Marks
             if 0x0300 <= c <= 0x036F:
                 continue
-
             # exclude Variation Selectors
             if 0xFE00 <= c <= 0xFE0F:
                 continue
-
             # exclude Variation Selectors Supplement
             if 0xE0100 <= c <= 0xE01EF:
                 continue
-
+            # exclude Private Use Area
+            if 0xE000 <= c <= 0xF8FF:
+                continue
+            # exclude Supplementary Private Use Area-A
+            if 0xF0000 <= c <= 0xFFFFF:
+                continue
+            # exclude Supplementary Private Use Area-B
+            if 0x100000 <= c <= 0x10FFFD:
+                continue
             ret.append(c)
         return ret
 
@@ -188,7 +196,7 @@ class UCD:
 
 def main():
     ucd = UCD(UCD_DIR)
-    generate_list('test/amb.txt', ucd.group['amb'], ucd)
+    generate_list('test/amb.txt', ucd.group['amb_ex_priv'], ucd)
     generate_list('test/nerdfont.txt', ucd.group['nerdfont'], ucd)
     generate_list('test/jis.txt', ucd.jis, ucd)
     generate_list('test/jpdoc.txt', ucd.group['jpdoc'], ucd)
