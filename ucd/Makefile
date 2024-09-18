@@ -11,7 +11,7 @@ emoji/emoji-data.txt:
 	test -f $@ || curl -L -o $@ $(URI)/$@
 
 utf8_gen.py:
-	test -f $@ || curl -L -o $@ https://raw.githubusercontent.com/bminor/glibc/e3b0b3484cac61f9eae373751ac6eaf816a2c9c3/localedata/unicode-gen/utf8_gen.py
+	test -f $@ || curl -L -o $@ https://raw.githubusercontent.com/bminor/glibc/master/localedata/unicode-gen/utf8_gen.py
 
 UTF-8: UnicodeData.txt EastAsianWidth.txt DerivedCoreProperties.txt HangulSyllableType.txt
 	./utf8_gen.py \
