@@ -1,0 +1,16 @@
+# Variation Selectorsのテスト
+
+全角文字 + Variation Selectors という並びで`emacs -nw`の表示が壊れる
+
+.emacsに
+
+```
+(global-auto-composition-mode 0)
+```
+とすれば解消
+
+あ︀い︀う︀え︀お︀
+あ︀い︀う︀え︀お︀
+あ︀い︀う︀え︀お︀
+あ︀い︀う︀え︀お︀
+あ︀い︀う︀え︀お︀
