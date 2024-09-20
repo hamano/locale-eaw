@@ -373,7 +373,7 @@ def generate_mlterm(config, width_list):
         print('unicode_full_width_areas = ', file=out, end="")
         for start, end, width in width_list:
             if width == 2:
-                print(f'U+{start:04X},U+{end:04X},', file=out, end="")
+                print(f'U+{start:04X}-U+{end:04X},', file=out, end="")
         print('', file=out)
     print('done')
 
