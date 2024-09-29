@@ -61,6 +61,11 @@ eaw = 1
 ...
 ```
 
+# フォント
+
+このロケールに最適化した合成フォントをつくりました!
+[font-eaw](https://github.com/hamano/font-eaw)
+
 # どうしてこうなったシリーズ
 
 ## 大文字と小文字の違いのはずなのに
@@ -82,9 +87,12 @@ eaw = 1
 - [ⅺ] U+217A SMALL ROMAN NUMERAL ELEVEN: N (neutral)
 - [ⅻ] U+217B SMALL ROMAN NUMERAL TWELVE: N (neutral)
 
+## ℡がAmbiguousで℻がNeutral
+- [℡] U+2121 TELEPHONE SIGN
+- [℻] U+213B FACSIMILE SIGN
+
 ## Neutralで半角描画が厳しい文字たち
 - [‱] U+2031 PER TEN THOUSAND SIGN: N (neutral)
-- [℻] U+213B FACSIMILE SIGN
 - [⅏] U+214F SYMBOL FOR SAMARITAN SOURCE
 
 ## ⓪と⑳と㉑
@@ -94,8 +102,7 @@ eaw = 1
 
 ## ㉈
 - [㉈] U+3248 CIRCLED NUMBER TEN ON BLACK SQUARE: A (ambiguous)
-この文字はambiguousなのにglibcのUTF-8ロケールで全角となっている。ゆえに壊れやすい。
-
+この文字はambiguousなのにglibc標準のUTF-8ロケールで全角となっている。ゆえに壊れやすい。
 
 ## 麻雀牌
 - [🀀] MAHJONG TILE EAST WIND: N (neutral)
