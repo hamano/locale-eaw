@@ -2,11 +2,11 @@
 
 ## East Asian Ambiguous Width問題とは
 
-East Asian Ambiguous文字とは、Unicodeで文字幅が曖昧(文脈により異なる文字幅で表示する)と定義されている文字のことで、例えば、※(U+203B)や○(U+25CB)や×(U+00D7)や△(U+25B3)などの文字です。
+East Asian Ambiguous文字とは、Unicodeで文字幅が曖昧(文脈により異なる文字幅)と定義されている文字のことで、例えば、※(U+203B)や○(U+25CB)や×(U+00D7)や△(U+25B3)などの文字です。
 
 East Asian Ambiguous 文字の一覧は[こちら](https://raw.githubusercontent.com/hamano/locale-eaw/master/test/amb.txt)。
 
-East Asian Ambiguous Width 問題とは、これらの文字をコンソールで表示する際libcの`wcwidth(3)`、シェル、ターミナルエミュレータ、テキストエディタなどのプログラムがそれぞれ異なる文字幅で認識する問題です。
+East Asian Ambiguous Width問題とは、これらの文字をコンソールで表示する際libcの`wcwidth(3)`、シェル、ターミナルエミュレータ、テキストエディタなどのプログラムがそれぞれ異なる文字幅で認識する問題です。
 
 例えばテキストエディタのカーソルの表示位置と内部状態が食い違ってしまうため、表示が壊れてしまいます。
 
@@ -14,7 +14,7 @@ East Asian Ambiguous Width 問題とは、これらの文字をコンソール�
 
 ## 解決方法その1: 曖昧な文字を全角で統一する EAW-FULLWIDTH
 
-この問題のてっとり早い解決方法は曖昧な文字の文字幅を全角で統一する事です。
+この問題の古典的な解決方法は曖昧な文字幅を全角で統一する事です。
 
 対応方法はアプリケーションによって様々ですが、xterm, mlterm, vimなどを使っている人は設定やオプションを指定するだけで文字幅を変更できます。
 
@@ -24,7 +24,7 @@ rxvt-unicodeのようなアプリはlibc localeを修正することで文字幅
 
 ## 解決方法その2: 文字毎に最適な文字幅を設定する EAW-CONSOLE
 
-曖昧な文字を全角に統一すると以下のような問題が起こります。
+曖昧な文字を全角に変更すると以下のような問題が起こります。
 
 - 罫線が全角となってしまう。
   - ncursesやtmuxなどのTUI表示が壊れる
@@ -44,10 +44,11 @@ rxvt-unicodeのようなアプリはlibc localeを修正することで文字幅
   - bash, zshなどのシェル
 - mlterm
 - emacs
-- 最近のvim
+- vim
+- neovim
 
 などがあります。
-各文字毎に文字幅を設定するのは大変ですが、このレポジトリではこれを実現するために役立つツールとおすすめのロケール`UTF-8-EAW-CONSOLE`を提供します。
+すべてのアプリケーションで文字幅を統一するのは大変ですが、このレポジトリではこれを実現するためのツールとおすすめのロケール`UTF-8-EAW-CONSOLE`を提供します。
 
 各アプリケーションの設定方法は[README-EAW-CONSOLE.md](README-EAW-CONSOLE.md)を参照してください。
 
@@ -104,6 +105,8 @@ eaw = 1
 - [㉈] U+3248 CIRCLED NUMBER TEN ON BLACK SQUARE: A (ambiguous)
 この文字はambiguousなのにglibc標準のUTF-8ロケールで全角となっている。ゆえに壊れやすい。
 
+https://sourceware.org/bugzilla/show_bug.cgi?id=24658
+
 ## 麻雀牌
 - [🀀] MAHJONG TILE EAST WIND: N (neutral)
 - [🀄] MAHJONG TILE RED DRAGON: W (wide)
@@ -111,8 +114,6 @@ eaw = 1
 ## トランプのジョーカーだけWide
 - [🃏] PLAYING CARD BLACK JOKER: W (wide)
 - [🂡] PLAYING CARD ACE OF SPADES: N (neutral)
-
-https://sourceware.org/bugzilla/show_bug.cgi?id=24658
 
 # 参考文献
 - [UAX#11: East Asian Width](https://www.unicode.org/reports/tr11/)
