@@ -5,11 +5,11 @@ East Asian Ambiguous文字を一律に全角とすると、様々な問題が起
 欧文であまり利用されず、半角で表示することが困難な文字のみを全角とすることで、
 できるだけTUIアプリケーションが壊れないよう調整したロケールです。
 
-いくつか例を挙げると、
+例を挙げると、
 
 罫線、ブロック要素、ラテン文字、キリル文字などを半角とし、
 
-※、♨、①、絵文字、nerdfont文字などを全角として扱います。
+※、♨、①、絵文字、nerdfont文字などを全角としてます。
 
 詳細は[文字幅の裁定](#文字幅の裁定)を参照
 
@@ -27,7 +27,7 @@ ja_JP.UTF-8 UTF-8-EAW-CONSOLE
 
 ## rxvt-unicodeの設定
 
-libcのロケールを修正する事で、曖昧な文字幅が良い感じになります
+rxvt-unicodeは標準でglibcのロケールを参照するため、設定は不要です。
 
 ## xtermの設定
 
@@ -67,7 +67,7 @@ curl -o ~/.vim/eaw-console.vim https://raw.githubusercontent.com/hamano/locale-e
 source ~/.vim/eaw-console.vim
 ~~~
 
-## vimの設定
+## neovimの設定
 
 1. [eaw-console.vim](https://raw.githubusercontent.com/hamano/locale-eaw/master/dist/eaw-console.vim) を`~/.config/nvim/`に配置
 ```
@@ -82,24 +82,25 @@ source ~/.config/nvim/eaw-console.vim
 
 ## mltermの設定
 
-.mlterm/main に設定
+`dist/eaw-console.mlterm`の内容を`~/.mlterm/main`に設定
 
 ~~~
-unicode_full_width_areas = ...
+$ cat dist/eaw-console.mlterm >> ~/.mlterm/main
 ~~~
 
 # 文字幅の裁定
 
-## ※
+## ※♨
 - 和文では全角として扱われてきた歴史がある
 - 欧文であまり使われていないような印象
 
 全角とする
 
-## 丸数字(①〜⑳)
+## 丸数字(①〜⑳、⓪)
 - 和文フォントでは全角が一般的
 - ⑳を半角で表示するのは窮屈
 - ⑳まではambiguousだが㉑からWideとなっている。⑳を半角にすると一貫性がなくなる
+- ⓪はNeutralだがこれのみ半角とする訳にはいくまい
 
 全角とする
 
