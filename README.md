@@ -92,9 +92,10 @@ eaw = 1
 - [℡] U+2121 TELEPHONE SIGN
 - [℻] U+213B FACSIMILE SIGN
 
-## Neutralで半角描画が厳しい文字たち
+## Neutralで半角描画が困難な文字たち
 - [‱] U+2031 PER TEN THOUSAND SIGN: N (neutral)
 - [⅏] U+214F SYMBOL FOR SAMARITAN SOURCE
+- [☃] U+2603 SNOWMAN
 
 ## ⓪と⑳と㉑
 - [⓪] U+24EA CIRCLED DIGIT ZERO: N (neutral)
