@@ -156,13 +156,20 @@ class UCD:
         ret.extend(range(0x100000, 0x10FFFD + 1))
         return ret
 
+    # nerdfontの正確なコードポイントはこちら
+    # https://github.com/ryanoasis/nerd-fonts/wiki/Glyph-Sets-and-Code-Points
+    # 正確には 23fb - 23fe, 2665, 26a1, 2b58 などの非プライベート領域を含んでいる
+    # これらの文字幅変更は賛否があるのではないかと思うので除外している
+    # フォントから抽出した`nerdfont/list.txt`も参考に
     def load_nerdfont(self):
         ret = []
-        with open('nerdfont/list.txt') as f:
-            for line in f:
-                if line.startswith('#'):
-                    continue
-                ret.append(int(line, 16))
+        ret.extend(range(0xE000, 0xF8FF + 1))
+        ret.extend(range(0xF0000, 0xF1FFF + 1))
+#        with open('nerdfont/list.txt') as f:
+#            for line in f:
+#                if line.startswith('#'):
+#                    continue
+#                ret.append(int(line, 16))
         return ret
 
     def load_jis(self):
