@@ -77,39 +77,11 @@ east_asian_width 1
 ~~~
 と設定する。
 
-## tmux 2.2以降
+## tmux
 
-* libcのロケールを修正 -> tmuxのウィンドウ内の表示はA=2に統一できます
-* ウィンドウ分割時の罫線は改修が必要です
+[fixtmux](./fixtmux) を利用してください。
 
-## tmux 2.7以降
-
-libcのロケールをA=2に修正した上で、以下の修正が必要でした
-
-~~~
-diff --git a/tmux.c b/tmux.c
-index 5b73079..0377ddd 100644
---- a/tmux.c
-+++ b/tmux.c
-@@ -202,6 +202,7 @@ main(int argc, char **argv)
-                        errx(1, "need UTF-8 locale (LC_CTYPE) but have %s", s);
-        }
-
-+       setlocale(LC_CTYPE, "");
-        setlocale(LC_TIME, "");
-        tzset();
-~~~
-
-
-ターミナルがACSをサポートしている場合、罫線の描画にACSを使うよう設定します。
-
-~/.tmux.conf:
-
-~~~
-set -ag terminal-overrides ',*:U8=0'
-~~~
-
-* [tmuxの罫線素片をACSに強制する](https://qiita.com/yanma/items/2644e6db6f3bcf249690)
+`UTF-8-EAW-FULLWIDTH`を利用する場合罫線の修正も必要です。
 
 ## weztermで曖昧な文字幅を全角にする
 <https://wezfurlong.org/wezterm/config/lua/config/treat_east_asian_ambiguous_width_as_wide.html>
