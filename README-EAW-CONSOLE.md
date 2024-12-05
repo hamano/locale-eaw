@@ -88,6 +88,10 @@ source ~/.config/nvim/eaw-console.vim
 $ cat dist/eaw-console.mlterm >> ~/.mlterm/main
 ~~~
 
+## tmuxの設定
+
+[fixtmux](./fixtmux) を利用してください。
+
 # 文字幅の裁定
 
 ## `※♨`
