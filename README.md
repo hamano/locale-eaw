@@ -58,7 +58,8 @@ rxvt-unicodeのようなアプリはlibc localeを修正することで文字幅
 
 ```
 [EAW-CUSTOM]
-eaw = 1
+# 曖昧な文字幅を全角にする
+amb = 2
 ...
 ```
 
