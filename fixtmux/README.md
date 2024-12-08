@@ -11,7 +11,7 @@ setlocale(LC_CTYPE, "C")
 ```
 
 を実行するからです。
-tumuxを以下のように修正すると解決します。
+tmuxを以下のように修正すると解決します。
 
 ~~~
 diff --git a/tmux.c b/tmux.c
