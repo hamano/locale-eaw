@@ -2,16 +2,16 @@
 
 tmuxはロケールの文字幅を利用しますがtmux 2.7以降、
 修正したロケール `UTF-8-EAW-CONSOLE` や `UTF-8-EAW-FULLWIDTH`
-を導入してもtmuxでは反映されません。
+を導入してもtmuxには反映されません。
 
-tmuxは起動時に
+なぜかtmuxは起動時に
 
 ```
 setlocale(LC_CTYPE, "C")
 ```
 
 を実行するからです。
-tmuxを以下のように修正すると解決します。
+tmuxを以下のように修正するとロケールの変更を抑制できます。
 
 ~~~
 diff --git a/tmux.c b/tmux.c
