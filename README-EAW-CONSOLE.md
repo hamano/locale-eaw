@@ -88,6 +88,18 @@ source ~/.config/nvim/eaw-console.vim
 $ cat dist/eaw-console.mlterm >> ~/.mlterm/main
 ~~~
 
+## weztermの設定
+
+1. `dist/eaw-console-wezterm.lua`を`~/.config/wezterm/`に配置
+
+2. `.config/wezterm/wezterm.lua`に以下を設定
+
+```
+config.cell_widths = require 'eaw-console-wezterm'
+```
+
+`treat_east_asian_ambiguous_width_as_wide`は既定値(false)にしておくこと
+
 ## tmuxの設定
 
 [fixtmux](./fixtmux) を利用してください。
