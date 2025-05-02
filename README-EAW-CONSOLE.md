@@ -69,16 +69,12 @@ source ~/.vim/eaw-console.vim
 
 ## neovimの設定
 
-1. [eaw-console.vim](https://raw.githubusercontent.com/hamano/locale-eaw/master/dist/eaw-console.vim) を`~/.config/nvim/`に配置
-```
-mkdir -p ~/.config/nvim/
-curl -o ~/.config/nvim/eaw-console.vim https://raw.githubusercontent.com/hamano/locale-eaw/master/dist/eaw-console.vim
-```
+[eaw-console.vim](https://raw.githubusercontent.com/hamano/locale-eaw/master/dist/eaw-console.vim) を`~/.config/nvim/plugin/`に配置
 
-2. `~/.config/nvim/init.vim` に以下を設定
-~~~
-source ~/.config/nvim/eaw-console.vim
-~~~
+```
+mkdir -p ~/.config/nvim/plugin/
+curl -o ~/.config/nvim/plugin/eaw-console.vim https://raw.githubusercontent.com/hamano/locale-eaw/master/dist/eaw-console.vim
+```
 
 ## mltermの設定
 
