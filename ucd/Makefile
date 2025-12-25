@@ -1,4 +1,4 @@
-UNICODE_VER=16.0.0
+UNICODE_VER=17.0.0
 URI=https://www.unicode.org/Public/$(UNICODE_VER)/ucd
 
 all: UTF-8
