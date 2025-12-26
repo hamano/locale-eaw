@@ -93,7 +93,7 @@ class UCD:
     def load_eaw(self):
         path = f'{self.ucd_dir}/EastAsianWidth.txt'
         ret = {}
-        line_re = re.compile('([0-9A-Fa-f\.]+)\s*;\s*(\w+)\s+#\s+(.*)')
+        line_re = re.compile(r'([0-9A-Fa-f\.]+)\s*;\s*(\w+)\s+#\s+(.*)')
         f = open(path)
         for line in f:
             if line.strip() == '' or line.startswith('#'):
@@ -278,7 +278,7 @@ def generate_flavor(config, ucd):
 
 def load_emoji(fn):
     emoji = {}
-    line_re = re.compile('([0-9A-Fa-f\.]+)\s+;\s+(\w+)\s+(.*)')
+    line_re = re.compile(r'([0-9A-Fa-f\.]+)\s+;\s+(\w+)\s+(.*)')
     with open(fn) as f:
         for line in f:
             if line.startswith('#'):
@@ -397,8 +397,8 @@ endif
 call setcellwidths([\
 ''', file=out)
         for start, end, width in width_list:
-            print(f'\[0x{start:x},0x{end:x},{width}],', file=out)
-        print('\])', file=out)
+            print(f'\\[0x{start:x},0x{end:x},{width}],', file=out)
+        print('\\])', file=out)
     print('done')
 
 def generate_wezterm(config, width_list):
