@@ -24,16 +24,7 @@
 #include <termios.h>
 #include <unistd.h>
 
-/*
- * Replacement table: pairs of {"before", "after"} UTF-8 strings.
- * Before and after MUST have the same byte length.
- */
-static const struct {
-    const char *before;
-    const char *after;
-} table[] = {
-    {"●", "⬤"}, /* U+25CF BLACK CIRCLE -> U+2B24 BLACK LARGE CIRCLE */
-};
+#include "table.h"
 
 #define TABLE_SIZE (sizeof(table) / sizeof(table[0]))
 
