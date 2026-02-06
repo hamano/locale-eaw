@@ -3,7 +3,7 @@ CFLAGS = -Wall -Wextra -O2
 
 all: fixtui
 
-fixtui: fixtui.c
+fixtui: fixtui.c table.h
 	$(CC) $(CFLAGS) -o $@ $< -lutil
 
 install: fixtui
