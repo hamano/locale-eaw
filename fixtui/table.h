@@ -6,10 +6,11 @@ static const struct {
     const char *before;
     const char *after;
 } table[] = {
-    {"●", "⬤"}, // U+25CF BLACK CIRCLE -> U+2B24 BLACK LARGE CIRCLE
+    {"●", "•"}, // U+25CF BLACK CIRCLE -> U+2022 BULLET
     {"○", "◦"}, // U+25CB WHITE CIRCLE -> U+25E6 WHITE BULLET
     {"◯", "◦"}, // U+25EF LARGE CIRCLE -> U+25E6 WHITE BULLET
     {"■", "▪"}, // U+25A0 BLACK SQUARE -> U+25AA BLACK SMALL SQUARE
+    {"□", "▫"}, // U+25A1 WHITE SQUARE -> U+25AB WHITE SMALL SQUARE
     {"▲", "▴"}, // U+25B2 BLACK UP-POINTING TRIANGLE -> U+25B4 SMALL BLACK UP-POINTING TRIANGLE
     {"▼", "▾"}, // U+25BC BLACK DOWN-POINTING TRIANGLE -> U+25BE SMALL BLACK DOWN-POINTING TRIANGLE
     {"←", "￩"}, // U+2190 LEFTWARDS ARROW -> U+FFE9 HALFWIDTH LEFTWARDS ARROW
