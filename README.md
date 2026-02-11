@@ -48,6 +48,16 @@ rxvt-unicodeのようなアプリはlibc localeを修正することで文字幅
 - neovim
 - wezterm
 
+[fixtui](./fixtui)との併用で以下アプリケーションの表示が崩れないよう調整できます。
+
+- whiptail
+- lazygit
+- opencode
+- Codex CLI
+- Github Copilot CLI
+- Claude Code
+- Gemini CLI
+
 などがあります。
 すべてのアプリケーションで文字幅を指定するのは大変ですが、このリポジトリではこれを実現するためのツールとおすすめのロケール`UTF-8-EAW-CONSOLE`を提供します。
 
