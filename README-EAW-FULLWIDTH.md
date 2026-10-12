@@ -12,6 +12,16 @@ ja_JP.UTF-8 UTF-8-EAW-FULLWIDTH
 
 3. `sudo locale-gen` を実行
 
+### ホームディレクトリにインストールする場合
+
+システムの i18n_ctype が古い場合、新しいUnicodeで追加された文字の wcwidth() が -1 になります。
+root 権限なしで、最新の i18n_ctype を使ったロケールをホームディレクトリに生成できます。
+
+~~~
+make install-user EAW=FULLWIDTH
+export LOCPATH=$HOME/.locale   # .zshrc 等に追加
+~~~
+
 ## rxvt-unicodeで曖昧な文字幅を全角にする
 
 libcのロケールを修正する事で、曖昧な文字幅を統一できます。
