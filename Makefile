@@ -17,6 +17,7 @@ dist: ucd/UTF-8 ucd/EastAsianWidth.txt ucd/i18n_ctype
 
 install:
 	sudo install dist/UTF-8-EAW-FULLWIDTH.gz dist/UTF-8-EAW-CONSOLE.gz /usr/share/i18n/charmaps/
+	sudo install -D -m644 dist/locales/i18n_ctype /usr/local/share/i18n/locales/i18n_ctype
 	sudo locale-gen
 
 install-user:

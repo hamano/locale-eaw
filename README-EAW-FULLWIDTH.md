@@ -4,17 +4,29 @@
 
 1. [UTF-8-EAW-FULLWIDTH.gz](https://raw.githubusercontent.com/hamano/locale-eaw/master/dist/UTF-8-EAW-FULLWIDTH.gz) を /usr/share/i18n/charmaps/ に配置
 
-2. /etc/locale.gen を以下のように変更
+2. [i18n_ctype](https://raw.githubusercontent.com/hamano/locale-eaw/master/dist/locales/i18n_ctype) を /usr/local/share/i18n/locales/ に配置
+
+   システムの i18n_ctype が古い場合、新しいUnicodeで追加された文字の wcwidth() が -1 になるため、最新の i18n_ctype を利用します。
+   Debian/Ubuntu の locale-gen は /usr/local/share/i18n/locales/ を優先して参照します。
+   ja_JP 以外のロケールにも適用されます。
+
+3. /etc/locale.gen を以下のように変更
 ~~~
 #ja_JP.UTF-8 UTF-8
 ja_JP.UTF-8 UTF-8-EAW-FULLWIDTH
 ~~~
 
-3. `sudo locale-gen` を実行
+4. `sudo locale-gen` を実行
+
+   locale-gen を使わない環境では以下のように直接 localedef を実行します。
+   ~~~
+   sudo I18NPATH=/usr/local/share/i18n/ localedef -i ja_JP -f UTF-8-EAW-FULLWIDTH ja_JP.UTF-8
+   ~~~
+
+リポジトリから `make install` でも 1, 2, 4 を実行できます。
 
 ### ホームディレクトリにインストールする場合
 
-システムの i18n_ctype が古い場合、新しいUnicodeで追加された文字の wcwidth() が -1 になります。
 root 権限なしで、最新の i18n_ctype を使ったロケールをホームディレクトリに生成できます。
 
 ~~~
