@@ -1,4 +1,4 @@
-UNICODE_VERSION=17.0.0
+UNICODE_VERSION=18.0.0
 URI=https://www.unicode.org/Public/$(UNICODE_VERSION)/ucd
 
 all: UTF-8
@@ -8,7 +8,7 @@ UnicodeData.txt EastAsianWidth.txt DerivedCoreProperties.txt HangulSyllableType.
 
 emoji/emoji-data.txt:
 	mkdir -p emoji
-	test -f $@ || curl -L -O $(URI)/$@
+	test -f $@ || curl -L -o $@ $(URI)/$@
 
 utf8_gen.py:
 	test -f $@ || curl -L -O $@ https://raw.githubusercontent.com/bminor/glibc/master/localedata/unicode-gen/$@
@@ -27,7 +27,7 @@ UTF-8: UnicodeData.txt EastAsianWidth.txt DerivedCoreProperties.txt HangulSyllab
 		-d DerivedCoreProperties.txt \
 		-e EastAsianWidth.txt \
 		-k HangulSyllableType.txt \
-		--unicode_version $(UNICODE_VER)
+		--unicode_version $(UNICODE_VERSION)
 
 clean:
 	rm -rf UTF-8 *.txt emoji/emoji-data.txt
